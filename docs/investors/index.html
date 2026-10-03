@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AgenticBank for Belo — Presentación inversores</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Sora:wght@500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0F172A;
+      --fg: #F8FAFC;
+      --muted: #94A3B8;
+      --primary: #00D084;
+      --accent: #22C55E;
+      --card: #1E293B;
+      --border: #334155;
+    }
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg: #F8FAFC;
+        --fg: #0F172A;
+        --muted: #64748B;
+        --primary: #00A86B;
+        --accent: #16A34A;
+        --card: #FFFFFF;
+        --border: #E2E8F0;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body {
+      font-family: "Instrument Sans", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      overflow: hidden;
+    }
+    .deck { height: 100%; position: relative; }
+    .slide {
+      display: none;
+      height: 100%;
+      padding: 3rem 4rem 4rem;
+      flex-direction: column;
+      justify-content: center;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .slide.active { display: flex; }
+    h1, h2, h3 { font-family: Sora, system-ui, sans-serif; font-weight: 600; }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.6rem); line-height: 1.2; }
+    h2 { font-size: clamp(1.4rem, 3vw, 2rem); margin-bottom: 1.2rem; color: var(--primary); }
+    p, li { font-size: 1.05rem; line-height: 1.55; color: var(--fg); }
+    .muted { color: var(--muted); }
+    .tagline { font-size: 1.25rem; color: var(--primary); margin-top: 0.75rem; }
+    .aviso {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      padding: 0.4rem 1rem; font-size: 0.75rem;
+      background: var(--card); border-top: 1px solid var(--border);
+      color: var(--muted); text-align: center; z-index: 10;
+    }
+    .nav {
+      position: fixed; bottom: 2.2rem; right: 1.5rem;
+      display: flex; gap: 0.5rem; z-index: 11;
+    }
+    button {
+      background: var(--card); border: 1px solid var(--border);
+      color: var(--fg); padding: 0.5rem 0.9rem; border-radius: 8px;
+      cursor: pointer; font-family: inherit; font-size: 0.9rem;
+    }
+    button:hover, button:focus-visible {
+      border-color: var(--primary); outline: 2px solid var(--primary); outline-offset: 2px;
+    }
+    .counter { position: fixed; bottom: 2.4rem; left: 1.5rem; font-size: 0.85rem; color: var(--muted); z-index: 11; }
+    ul { list-style: none; margin-top: 0.75rem; }
+    ul li { padding: 0.35rem 0; padding-left: 1.2rem; position: relative; }
+    ul li::before { content: "→"; position: absolute; left: 0; color: var(--primary); }
+    table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.95rem; }
+    th, td { text-align: left; padding: 0.55rem 0.75rem; border-bottom: 1px solid var(--border); }
+    th { color: var(--muted); font-weight: 500; }
+    .card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 1.25rem; margin-top: 1rem;
+    }
+    .demo-box { margin-top: 1.5rem; }
+    .bars { display: flex; gap: 0.75rem; margin-top: 1rem; flex-wrap: wrap; }
+    .bar {
+      flex: 1; min-width: 120px; background: var(--card);
+      border: 1px solid var(--border); border-radius: 10px; padding: 1rem; text-align: center;
+      opacity: 0; transform: translateY(12px); transition: opacity 0.5s, transform 0.5s;
+    }
+    .bar.show { opacity: 1; transform: translateY(0); }
+    .bar .val { font-family: Sora, sans-serif; font-size: 1.5rem; color: var(--primary); }
+    .bar .label { font-size: 0.8rem; color: var(--muted); margin-top: 0.25rem; }
+    .receipt {
+      margin-top: 1rem; font-family: ui-monospace, monospace; font-size: 0.8rem;
+      background: var(--card); border: 1px solid var(--border); border-radius: 8px;
+      padding: 0.75rem 1rem; color: var(--muted); opacity: 0; transition: opacity 0.4s 0.6s;
+    }
+    .receipt.show { opacity: 1; }
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1rem; }
+    @media (max-width: 700px) {
+      .slide { padding: 2rem 1.25rem 5rem; }
+      .grid2 { grid-template-columns: 1fr; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .bar, .receipt { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="deck" id="deck">
+    <section class="slide active" data-i="0">
+      <p class="muted" style="margin-bottom:0.5rem">Prototipo independiente · 2026</p>
+      <h1>AgenticBank for Belo</h1>
+      <p class="tagline">From Digital Banking to Agentic Banking.</p>
+      <p class="muted" style="margin-top:1rem">Los usuarios definen metas. Los agentes de IA ejecutan.</p>
+      <div class="demo-box">
+        <p><strong>Demo interactiva</strong> — cobro de USD 2.500 (regla 20/20/60)</p>
+        <div class="bars" id="bars">
+          <div class="bar" id="b1"><div class="val">500</div><div class="label">BELO_VAULT_SWEEP<br/>ahorro 20%</div></div>
+          <div class="bar" id="b2"><div class="val">500</div><div class="label">BELO_TAX_ISOLATION<br/>impuestos 20%</div></div>
+          <div class="bar" id="b3"><div class="val">1.500</div><div class="label">AVAILABLE_BALANCE<br/>60%</div></div>
+        </div>
+        <div class="receipt" id="receipt">audit · sha256 · chain valid · risk 98/100 (simulado)</div>
+      </div>
+    </section>
+    <section class="slide" data-i="1">
+      <h2>Problema</h2>
+      <ul>
+        <li>Múltiples monedas e inflación en LatAm</li>
+        <li>Pagos internacionales y tesorería manual</li>
+        <li>Herramientas fragmentadas</li>
+        <li>Las apps bancarias dan acceso; falta ejecución autónoma</li>
+      </ul>
+    </section>
+    <section class="slide" data-i="2">
+      <h2>Solución</h2>
+      <p>Sistema operativo financiero multi-agente:</p>
+      <ul>
+        <li>Analiza comportamiento y entiende metas</li>
+        <li>Crea estrategias y recomienda acciones</li>
+        <li>Ejecuta operaciones aprobadas vía APIs de Belo (simuladas)</li>
+      </ul>
+      <p class="muted" style="margin-top:1rem">Financial Copilot · Goal Engine · Rules Engine · Multi-Agent Orchestrator</p>
+    </section>
+    <section class="slide" data-i="3">
+      <h2>Producto (prototipo)</h2>
+      <div class="grid2">
+        <div>
+          <p><strong>Agentes</strong></p>
+          <ul>
+            <li>Freelancer</li>
+            <li>Travel</li>
+            <li>Family Remittance</li>
+            <li>Treasury</li>
+            <li>Investment & Yield</li>
+          </ul>
+        </div>
+        <div>
+          <p><strong>Flujo</strong></p>
+          <ul>
+            <li>Meta → Goal Engine</li>
+            <li>Decision + Risk Engine</li>
+            <li>2FA / aprobación si aplica</li>
+            <li>Execution + Audit SHA-256</li>
+          </ul>
+        </div>
+      </div>
+      <p class="muted" style="margin-top:1rem">Construido en Google AI Studio. Datos de ejemplo.</p>
+    </section>
+    <section class="slide" data-i="4">
+      <h2>Diferenciación y confianza</h2>
+      <ul>
+        <li>Meta en lugar de transacción</li>
+        <li>Límites de autonomía por transacción</li>
+        <li>Umbrales de 2FA</li>
+        <li>Killswitch global</li>
+        <li>Recibos criptográficos SHA-256</li>
+        <li>El usuario aprueba, limita y frena</li>
+      </ul>
+    </section>
+    <section class="slide" data-i="5">
+      <h2>Valor</h2>
+      <div class="grid2">
+        <div class="card">
+          <p><strong>Para Belo</strong></p>
+          <ul>
+            <li>Más transacciones / usuario</li>
+            <li>Retención por metas</li>
+            <li>Volumen en rieles (FX, PIX, ahorro)</li>
+            <li>Segmento B2B (Treasury)</li>
+            <li>ADF como métrica de IA</li>
+          </ul>
+        </div>
+        <div class="card">
+          <p><strong>Para el usuario</strong></p>
+          <ul>
+            <li>Menos tareas manuales</li>
+            <li>Escudo inflación / devaluación</li>
+            <li>Transparencia de cada decisión</li>
+            <li>Control total</li>
+          </ul>
+        </div>
+      </div>
+      <p class="muted" style="margin-top:0.75rem">Sin alianza actual. Colaboración posible: sandbox, revenue share, co-marketing.</p>
+    </section>
+    <section class="slide" data-i="6">
+      <h2>Modelo de negocio</h2>
+      <p class="muted">Hipótesis de planificación. Precios a validar.</p>
+      <table>
+        <thead><tr><th>Plan</th><th>Precio</th><th>Incluye</th></tr></thead>
+        <tbody>
+          <tr><td>Free</td><td>USD 0</td><td>Copilot, dashboard, 1 meta, 2 reglas</td></tr>
+          <tr><td>Pro</td><td>~USD 5–9/mes</td><td>Metas ilimitadas, 3 agentes, auditoría</td></tr>
+          <tr><td>Business</td><td>desde ~USD 29/mes</td><td>Treasury, multiusuario, API</td></tr>
+        </tbody>
+      </table>
+    </section>
+    <section class="slide" data-i="7">
+      <h2>Proyecciones</h2>
+      <p class="muted">Hipótesis de planificación, no resultados.</p>
+      <table>
+        <thead><tr><th>Escenario</th><th>Usuarios</th><th>GPV</th><th>ARR</th></tr></thead>
+        <tbody>
+          <tr><td>Conservador</td><td>400.000</td><td>USD 2B</td><td>USD 12M</td></tr>
+          <tr><td>Base</td><td>1M</td><td>USD 5B</td><td>USD 30M</td></tr>
+          <tr><td>Optimista</td><td>2M</td><td>USD 10B</td><td>USD 60M</td></tr>
+        </tbody>
+      </table>
+    </section>
+    <section class="slide" data-i="8">
+      <h2>Roadmap 18 meses</h2>
+      <ul>
+        <li><strong>M1–3:</strong> demo, pitch → 50 conversaciones; 1 contacto Belo</li>
+        <li><strong>M4–6:</strong> grants / hackatones → ≥1 financiamiento o premio</li>
+        <li><strong>M7–9:</strong> sandbox + lista de espera → 300</li>
+        <li><strong>M10–12:</strong> beta 100–500 → ADF ≥ 20%</li>
+        <li><strong>M13–18:</strong> suscripción B2B → 5–10 empresas pagando</li>
+      </ul>
+      <p class="muted" style="margin-top:1rem">Uso de fondos (modelo): 50% producto · 20% seguridad · 15% infra/IA · 15% adquisición</p>
+    </section>
+    <section class="slide" data-i="9">
+      <h2>ADF · Visión · Contacto</h2>
+      <p><strong>ADF</strong> = Decisiones de IA ejecutadas / Decisiones financieras totales</p>
+      <p class="muted">Metas (hipótesis): Año 1 → 20% · Año 2 → 40% · Año 3 → 60%</p>
+      <p style="margin-top:1.25rem">Visión: transformar a Belo de plataforma financiera en un sistema operativo financiero autónomo, con seguridad, transparencia y control del usuario.</p>
+      <p style="margin-top:1.25rem"><strong>Equipo:</strong> Srbisnes (elcryptoboy) — arquitecto blockchain omnichain, Buenos Aires.</p>
+      <p class="muted" style="margin-top:0.5rem">TODO(owner): contacto</p>
+      <p class="muted" style="margin-top:1rem">Tracción: prototipo funcional en Google AI Studio. Sin usuarios ni ingresos aún.</p>
+    </section>
+  </div>
+  <div class="counter"><span id="cur">1</span> / 10</div>
+  <div class="nav">
+    <button type="button" id="prev" aria-label="Anterior">←</button>
+    <button type="button" id="next" aria-label="Siguiente">→</button>
+  </div>
+  <div class="aviso">Prototipo independiente · No es producto oficial de Belo · Cifras = hipótesis de planificación · Sin fondos reales</div>
+  <script>
+    const slides = [...document.querySelectorAll(".slide")];
+    let i = 0;
+    const cur = document.getElementById("cur");
+    function show(n) {
+      i = Math.max(0, Math.min(slides.length - 1, n));
+      slides.forEach((s, k) => s.classList.toggle("active", k === i));
+      cur.textContent = i + 1;
+      if (i === 0) runDemo();
+    }
+    function runDemo() {
+      ["b1","b2","b3","receipt"].forEach(id => {
+        const el = document.getElementById(id);
+        el.classList.remove("show");
+      });
+      requestAnimationFrame(() => {
+        setTimeout(() => document.getElementById("b1").classList.add("show"), 100);
+        setTimeout(() => document.getElementById("b2").classList.add("show"), 350);
+        setTimeout(() => document.getElementById("b3").classList.add("show"), 600);
+        setTimeout(() => document.getElementById("receipt").classList.add("show"), 800);
+      });
+    }
+    document.getElementById("prev").addEventListener("click", () => show(i - 1));
+    document.getElementById("next").addEventListener("click", () => show(i + 1));
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowRight" || e.key === " ") { e.preventDefault(); show(i + 1); }
+      if (e.key === "ArrowLeft") { e.preventDefault(); show(i - 1); }
+    });
+    show(0);
+  </script>
+</body>
+</html>
