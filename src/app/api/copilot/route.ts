@@ -6,7 +6,11 @@ import { initialBalances, initialGoals } from "@/lib/mock-data";
 export const runtime = "nodejs";
 
 function reply(message: string): string {
-  const q = message.toLowerCase().normalize("NFD").replace(/\p{M}/gu, "");
+  // Strip diacritics without Unicode property escapes (max compatibility)
+  const q = message
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "");
 
   if (/ahorr|vault|fondo/.test(q)) {
     const g = initialGoals[0];
