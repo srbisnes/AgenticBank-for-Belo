@@ -20,10 +20,10 @@ export default function DashboardPage() {
     <div className="mx-auto max-w-5xl space-y-6">
       <header>
         <p className="text-xs uppercase tracking-widest text-[var(--muted)]">
-          Dashboard
+          Panel Principal
         </p>
         <h1 className="font-[family-name:var(--font-sora)] text-2xl font-semibold text-[var(--fg)]">
-          Net Worth & Cash Flow
+          Patrimonio Neto y Flujo de Fondos
         </h1>
         <p className="text-sm text-[var(--muted)]">
           Datos de ejemplo · prototipo sin fondos reales
