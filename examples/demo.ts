@@ -7,9 +7,9 @@
  *   audit chain valid: true
  */
 
-import { evaluate, applyAllocations, type Event } from "./rules-engine.ts";
-import { AuditTrail } from "./audit-receipt.ts";
-import { adf, targets } from "./adf.ts";
+import { evaluate, applyAllocations, type Event } from "./rules-engine";
+import { AuditTrail } from "./audit-receipt";
+import { adf, targets } from "./adf";
 
 const event: Event = {
   type: "income_received",
