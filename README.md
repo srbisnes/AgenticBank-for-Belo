@@ -133,7 +133,7 @@ Puerto de referencia del prototipo: 3000.
 
 ## Stack
 
-React · TypeScript · Express (`server.ts`) · `@google/genai` (Gemini) · datos de ejemplo en todo el prototipo.
+React 19 · Next.js 15 (App Router) · TypeScript · Tailwind CSS v4 · Groq Llama 3.3-70b / LLM Provider · API oficial pública de Belo (`api.belo.app`).
 
 ## Plan en dos etapas (hipótesis)
 

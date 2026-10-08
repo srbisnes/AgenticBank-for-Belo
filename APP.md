@@ -1,6 +1,6 @@
 # AgenticBank for Belo — App (prototipo)
 
-Next.js 15 · TypeScript · Tailwind · APIs simuladas Belo
+Next.js 15 (App Router) · React 19 · TypeScript · Tailwind CSS v4 · API Pública Belo + Groq Llama 3.3
 
 ## Correr local
 
