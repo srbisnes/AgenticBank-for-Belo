@@ -1,17 +1,16 @@
+"use client";
+
 import { DemoRunner } from "@/components/DemoRunner";
 import { adf, targets } from "@/lib/adf";
-import {
-  cashFlowSeries,
-  initialBalances,
-  initialGoals,
-} from "@/lib/mock-data";
+import { cashFlowSeries } from "@/lib/mock-data";
+import { useBankState } from "@/lib/state-context";
 
 export default function DashboardPage() {
+  const { balances, goals, aiDecisionsCount, totalDecisionsCount } = useBankState();
+
   const netWorth =
-    initialBalances.available +
-    initialBalances.vault +
-    initialBalances.taxEscrow;
-  const currentAdf = adf(12, 48);
+    balances.available + balances.vault + balances.taxEscrow;
+  const currentAdf = adf(aiDecisionsCount, totalDecisionsCount);
   const maxCash = Math.max(
     ...cashFlowSeries.flatMap((c) => [c.income, c.expense])
   );
@@ -26,7 +25,7 @@ export default function DashboardPage() {
           Patrimonio Neto y Flujo de Fondos
         </h1>
         <p className="text-sm text-[var(--muted)]">
-          Datos de ejemplo · prototipo sin fondos reales
+          Estado reactivo en vivo · prototipo de prueba sin fondos reales
         </p>
       </header>
 
@@ -38,11 +37,11 @@ export default function DashboardPage() {
           },
           {
             label: "Disponible",
-            value: `USD ${initialBalances.available.toLocaleString("es-AR")}`,
+            value: `USD ${balances.available.toLocaleString("es-AR")}`,
           },
           {
             label: "Vault",
-            value: `USD ${initialBalances.vault.toLocaleString("es-AR")}`,
+            value: `USD ${balances.vault.toLocaleString("es-AR")}`,
           },
           {
             label: "ADF",
@@ -52,10 +51,10 @@ export default function DashboardPage() {
         ].map((c) => (
           <div
             key={c.label}
-            className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-4"
+            className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-4 transition-all"
           >
             <p className="text-xs text-[var(--muted)]">{c.label}</p>
-            <p className="mt-1 font-[family-name:var(--font-sora)] text-xl text-[var(--primary)]">
+            <p className="mt-1 font-[family-name:var(--font-sora)] text-xl text-[var(--primary)] font-bold">
               {c.value}
             </p>
             {"sub" in c && c.sub && (
@@ -98,10 +97,10 @@ export default function DashboardPage() {
 
         <section className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-5">
           <h2 className="mb-4 font-[family-name:var(--font-sora)] text-sm font-semibold text-[var(--fg)]">
-            Metas activas
+            Metas activas ({goals.length})
           </h2>
           <ul className="space-y-3">
-            {initialGoals.map((g) => {
+            {goals.map((g) => {
               const pct = Math.min(
                 100,
                 Math.round((g.currentAmount / g.targetAmount) * 100)
@@ -109,12 +108,12 @@ export default function DashboardPage() {
               return (
                 <li key={g.id}>
                   <div className="mb-1 flex justify-between text-sm">
-                    <span>{g.title}</span>
+                    <span className="font-medium text-[var(--fg)]">{g.title}</span>
                     <span className="text-[var(--muted)]">{pct}%</span>
                   </div>
                   <div className="h-2 overflow-hidden rounded-full bg-white/10">
                     <div
-                      className="h-full rounded-full bg-[var(--primary)]"
+                      className="h-full rounded-full bg-[var(--primary)] transition-all duration-500"
                       style={{ width: `${pct}%` }}
                     />
                   </div>

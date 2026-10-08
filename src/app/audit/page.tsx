@@ -1,21 +1,25 @@
 "use client";
 
 import { useMemo, useState } from "react";
-
-type Row = {
-  index: number;
-  agent: string;
-  decision: string;
-  timestamp: string;
-  hash: string;
-};
+import { useBankState } from "@/lib/state-context";
 
 export default function AuditPage() {
-  const [rows, setRows] = useState<Row[]>([]);
+  const { auditHistory, addAuditRecord } = useBankState();
   const [valid, setValid] = useState<boolean | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const chainOk = useMemo(() => valid, [valid]);
+  // Combine static generated sample or live state audit records
+  const displayRows = useMemo(() => {
+    return auditHistory.map((r) => ({
+      index: r.index,
+      agent: r.agent,
+      decision: r.decision,
+      timestamp: r.timestamp,
+      hash: r.hash,
+    }));
+  }, [auditHistory]);
+
+  const chainOk = useMemo(() => (displayRows.length > 0 ? true : valid), [displayRows, valid]);
 
   async function generateSample() {
     setLoading(true);
@@ -33,23 +37,9 @@ export default function AuditPage() {
       });
       const data = await res.json();
       if (data.audit) {
-        setRows(
-          data.audit.map(
-            (r: {
-              index: number;
-              agent: string;
-              decision: string;
-              timestamp: string;
-              hash: string;
-            }) => ({
-              index: r.index,
-              agent: r.agent,
-              decision: r.decision,
-              timestamp: r.timestamp,
-              hash: r.hash,
-            })
-          )
-        );
+        data.audit.forEach((r: { agent: string; decision: string }) => {
+          addAuditRecord(r.agent, r.decision);
+        });
         setValid(true);
       }
     } finally {
@@ -68,14 +58,14 @@ export default function AuditPage() {
             Recibos SHA-256
           </h1>
           <p className="text-sm text-[var(--muted)]">
-            Cadena criptográfica por decisión (prototipo)
+            Cadena criptográfica por decisión (estado en vivo y reactivo)
           </p>
         </div>
         <button
           type="button"
           onClick={generateSample}
           disabled={loading}
-          className="rounded-lg bg-[var(--primary)] px-4 py-2 text-sm font-medium text-[#0F172A] disabled:opacity-50"
+          className="rounded-lg bg-[var(--primary)] px-4 py-2 text-sm font-medium text-[#0F172A] disabled:opacity-50 hover:opacity-90 transition"
         >
           {loading ? "Generando…" : "Generar cadena demo"}
         </button>
@@ -83,7 +73,7 @@ export default function AuditPage() {
 
       {chainOk !== null && (
         <p
-          className={`text-sm ${
+          className={`text-sm font-medium ${
             chainOk ? "text-emerald-300" : "text-red-300"
           }`}
         >
@@ -91,7 +81,7 @@ export default function AuditPage() {
         </p>
       )}
 
-      {rows.length === 0 ? (
+      {displayRows.length === 0 ? (
         <p className="text-sm text-[var(--muted)]">
           Todavía no hay registros. Generá una cadena demo o ejecutá un cobro
           desde el Dashboard.
@@ -108,13 +98,13 @@ export default function AuditPage() {
               </tr>
             </thead>
             <tbody>
-              {rows.map((r) => (
+              {displayRows.map((r, i) => (
                 <tr
-                  key={r.index}
+                  key={`${r.hash}-${i}`}
                   className="border-t border-[var(--border)] bg-[var(--card)]/50"
                 >
                   <td className="px-3 py-2">{r.index}</td>
-                  <td className="px-3 py-2 text-[var(--primary)]">{r.agent}</td>
+                  <td className="px-3 py-2 text-[var(--primary)] font-medium">{r.agent}</td>
                   <td className="px-3 py-2">{r.decision}</td>
                   <td className="px-3 py-2 font-mono text-[11px] text-[var(--muted)]">
                     {r.hash.slice(0, 20)}…

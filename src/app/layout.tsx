@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Instrument_Sans, Sora } from "next/font/google";
 import { Sidebar } from "@/components/Sidebar";
+import { BankProvider } from "@/lib/state-context";
 import "./globals.css";
 
 const instrument = Instrument_Sans({
@@ -28,10 +29,12 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body className={`${instrument.variable} ${sora.variable} antialiased`}>
-        <div className="flex min-h-screen">
-          <Sidebar />
-          <main className="flex-1 overflow-auto p-6 md:p-8">{children}</main>
-        </div>
+        <BankProvider>
+          <div className="flex min-h-screen">
+            <Sidebar />
+            <main className="flex-1 overflow-auto p-6 md:p-8">{children}</main>
+          </div>
+        </BankProvider>
       </body>
     </html>
   );

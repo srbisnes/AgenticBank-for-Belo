@@ -1,0 +1,23 @@
+
+> agenticbank-for-belo@0.1.0 dev
+> next dev
+
+   ▲ Next.js 15.5.27
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.0.2:3000
+
+ ✓ Starting...
+ ✓ Ready in 2s
+ ○ Compiling / ...
+ ✓ Compiled / in 5.5s (651 modules)
+ HEAD / 200 in 6255ms
+ GET / 200 in 129ms
+ ○ Compiling /api/belo/execute ...
+ ✓ Compiled /api/belo/execute in 779ms (655 modules)
+ POST /api/belo/execute 200 in 1187ms
+ GET / 200 in 209ms
+ ○ Compiling /goals ...
+ ✓ Compiled /goals in 619ms (648 modules)
+ GET /goals 200 in 1127ms
+ GET / 200 in 116ms
+ POST /api/belo/execute 200 in 39ms
