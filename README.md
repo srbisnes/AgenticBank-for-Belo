@@ -165,6 +165,10 @@ Ver [CONTRIBUTING.md](CONTRIBUTING.md). Áreas: tests del Rules Engine, nuevos a
 
 **Srbisnes** (elcryptoboy) — arquitecto blockchain omnichain y constructor de enjambres de agentes de IA, Buenos Aires.
 
+## Ecosistema y proyectos relacionados
+
+- [Stellar Agent Layer](https://github.com/srbisnes/stellar-agent-layer): Capa de agentes de IA + Intent Engine + Human-in-the-Loop en Stellar Testnet para liquidación multi-moneda, pagos y off-ramp USDC → ARS.
+
 ## Licencia
 
 MIT © 2026 Srbisnes
