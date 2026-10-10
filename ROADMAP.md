@@ -49,6 +49,7 @@ gantt
 - [x] Controles de límite de autonomía, umbrales de 2FA, disparadores
 - [x] Auditoría: recibos SHA-256, puntaje de riesgo simulado, killswitch
 - [x] Consola de API: explorador OpenAPI de `/api/belo/execute` (simulado)
+- [x] Interoperabilidad cross-chain y puerto de agente con [Stellar Agent Layer](https://github.com/srbisnes/stellar-agent-layer) (USDC / XLM / Human-in-the-Loop)
 - [ ] Despliegue multi-tenant y políticas por organización
 
 ### Fase 4 — Banca agéntica completa

@@ -42,9 +42,15 @@ sequenceDiagram
 | Frontend | Web App, Mobile App, Agent Chat | Interfaz, metas, dashboard |
 | AI Layer | Financial Copilot, Goal Engine, Decision Engine, Memory Layer, Risk Engine, Multi-Agent Orchestrator | Análisis, planificación, decisión y riesgo |
 | Agentes | Freelancer, Travel, Family, Treasury, Investment | Especialización por caso de uso |
-| Execution Layer | Payments, Transfers, PIX, Stablecoins, FX, Cards | Rieles de ejecución |
+| Execution Layer | Payments, Transfers, PIX, Stablecoins, FX, Cards, Stellar Agent Layer | Rieles de ejecución e interoperabilidad cross-chain |
 | Belo Integration | Capa de integración desacoplada | APIs simuladas en el prototipo |
 | Audit | SHA-256 chain, Risk score, Compliance matrices (diseño) | Trazabilidad |
+
+## Interoperabilidad y Rieles de Ejecución
+
+El sistema contempla conectores de ejecución híbridos:
+- **Belo APIs (simuladas):** Integración con rieles bancarios y fintech locales (PIX, CVU/CBU, SPEI).
+- **Stellar Agent Layer:** Integración con [Stellar Agent Layer](https://github.com/srbisnes/stellar-agent-layer) para liquidación descentralizada en Stellar Testnet/Mainnet, cobros/pagos en USDC/XLM y flujos con confirmación segura Human-in-the-Loop.
 
 ## Endpoint simulado
 

@@ -165,6 +165,10 @@ See [CONTRIBUTING.md](CONTRIBUTING.md). Areas: Rules Engine tests, new agents, p
 
 **Srbisnes** (elcryptoboy) — omnichain blockchain architect and AI agent-swarm builder, Buenos Aires.
 
+## Ecosystem & Related Projects
+
+- [Stellar Agent Layer](https://github.com/srbisnes/stellar-agent-layer): AI Agent Layer + Intent Engine + Human-in-the-Loop on Stellar Testnet for multi-currency settlement, payments, and USDC → ARS off-ramp.
+
 ## License
 
 MIT © 2026 Srbisnes

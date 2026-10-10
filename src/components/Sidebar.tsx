@@ -45,9 +45,22 @@ export function Sidebar() {
           );
         })}
       </nav>
-      <p className="mt-4 px-2 text-[10px] leading-relaxed text-[var(--muted)]">
-        No es producto oficial de Belo. No mueve dinero real. APIs simuladas.
-      </p>
+      <div className="mt-4 border-t border-[var(--border)] pt-3 px-2">
+        <a
+          href="https://github.com/srbisnes/stellar-agent-layer"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group flex items-center justify-between rounded-md p-1.5 text-[11px] text-[var(--muted)] transition hover:bg-white/5 hover:text-[var(--fg)]"
+        >
+          <span className="flex items-center gap-1.5 font-medium">
+            <span className="text-[var(--primary)]">★</span> Stellar Agent Layer
+          </span>
+          <span className="text-[9px] text-[var(--muted)] opacity-70 group-hover:opacity-100">↗</span>
+        </a>
+        <p className="mt-2 text-[10px] leading-relaxed text-[var(--muted)]">
+          No es producto oficial de Belo. No mueve dinero real. APIs simuladas.
+        </p>
+      </div>
     </aside>
   );
 }
