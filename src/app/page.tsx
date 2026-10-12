@@ -67,6 +67,50 @@ export default function DashboardPage() {
 
       <DemoRunner />
 
+      <section className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-5">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[var(--border)] pb-3 mb-4">
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="inline-block h-2 w-2 rounded-full bg-purple-500 animate-pulse" />
+              <h2 className="font-[family-name:var(--font-sora)] text-sm font-semibold text-[var(--fg)]">
+                Capa de Ejecución On-Chain — Stellar Agent Layer
+              </h2>
+            </div>
+            <p className="text-xs text-[var(--muted)] mt-0.5">
+              Rieles de liquidación en Stellar Testnet con Human-in-the-Loop y off-ramp USDC → ARS
+            </p>
+          </div>
+          <a
+            href="https://github.com/srbisnes/stellar-agent-layer"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 text-xs text-[var(--primary)] hover:underline shrink-0"
+          >
+            Ver en GitHub ↗
+          </a>
+        </div>
+        <div className="grid gap-3 sm:grid-cols-3 text-xs">
+          <div className="rounded-lg bg-white/5 p-3">
+            <p className="font-medium text-[var(--fg)]">🛡️ Human-in-the-Loop Gate</p>
+            <p className="mt-1 text-[var(--muted)]">
+              Cero firmas automáticas sin confirmación explícita del usuario.
+            </p>
+          </div>
+          <div className="rounded-lg bg-white/5 p-3">
+            <p className="font-medium text-[var(--fg)]">⚡ Off-Ramp USDC → ARS</p>
+            <p className="mt-1 text-[var(--muted)]">
+              Liquidación a Mercado Pago, Ualá, Lemon, CBU/CVU/Alias.
+            </p>
+          </div>
+          <div className="rounded-lg bg-white/5 p-3">
+            <p className="font-medium text-[var(--fg)]">🌐 Verified Testnet Rails</p>
+            <p className="mt-1 text-[var(--muted)]">
+              Horizon Testnet con soporte Friendbot faucet y auditoría on-chain.
+            </p>
+          </div>
+        </div>
+      </section>
+
       <div className="grid gap-4 lg:grid-cols-2">
         <section className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-5">
           <h2 className="mb-4 font-[family-name:var(--font-sora)] text-sm font-semibold text-[var(--fg)]">
