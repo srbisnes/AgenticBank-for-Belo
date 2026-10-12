@@ -6,6 +6,7 @@
 
 [![Status](https://img.shields.io/badge/status-prototype-orange)](https://github.com/srbisnes/AgenticBank-for-Belo)
 [![Stack](https://img.shields.io/badge/stack-React%20%7C%20TypeScript%20%7C%20Gemini-blue)](https://github.com/srbisnes/AgenticBank-for-Belo)
+[![Stellar Agent Layer](https://img.shields.io/badge/ecosystem-Stellar%20Agent%20Layer-7D00FF)](https://github.com/srbisnes/stellar-agent-layer)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
 [Presentación inversores](docs/investors/index.html) · [Brief](docs/investors/INVESTOR_BRIEF.md) · [Arquitectura](docs/ARCHITECTURE.md) · [Roadmap](ROADMAP.md) · [English](README.en.md)
@@ -59,6 +60,14 @@ ADF = Decisiones de IA ejecutadas / Decisiones financieras totales
 
 Metas (hipótesis): Año 1 → 20% · Año 2 → 40% · Año 3 → 60%
 
+## Capa de Ejecución On-Chain — Stellar Agent Layer
+
+AgenticBank para Belo se integra con la infraestructura complementaria [Stellar Agent Layer](https://github.com/srbisnes/stellar-agent-layer) como capa de ejecución cross-chain y rieles on-chain en Stellar Testnet.
+
+- **Human-in-the-Loop Safety Gate**: Ninguna transacción ejecuta movimientos de fondos sin aprobación explícita del usuario.
+- **USDC → ARS Off-Ramp**: Liquidación a CBU/CVU/Alias (Mercado Pago, Ualá, Lemon, bancos).
+- **Rieles Stellar Testnet**: Transacciones con verificación pública on-chain e integración con Friendbot.
+
 ## Arquitectura por capas
 
 ```mermaid
@@ -77,6 +86,7 @@ flowchart TB
   end
   subgraph Execution
     PAY[Payments / PIX / FX / Cards]
+    SAL[Stellar Agent Layer — Cross-Chain Execution]
   end
   subgraph Belo
     API[Integration Layer — simulada]
@@ -84,6 +94,7 @@ flowchart TB
   Frontend --> AI Layer
   AI Layer --> Execution
   Execution --> Belo
+  Execution --> SAL
 ```
 
 ## Ejemplo: cobro de USD 2.500
