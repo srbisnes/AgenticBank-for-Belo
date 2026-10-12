@@ -5,17 +5,31 @@ import type { BankEvent, ExecuteRequest, ExecuteResponse } from "@/lib/types";
 
 export const runtime = "nodejs";
 
+const MAX_AMOUNT = 1_000_000_000;
+const MAX_STRING_LENGTH = 100;
+
 export async function POST(req: NextRequest) {
   try {
     const body = (await req.json()) as Partial<ExecuteRequest>;
     const amount = Number(body.amount);
-    const currency = body.currency || "USD";
-    const agent = body.agent || "Freelancer";
-    const intent = body.intent || "allocate_income";
+    const currency = String(body.currency || "USD");
+    const agent = String(body.agent || "Freelancer");
+    const intent = String(body.intent || "allocate_income");
 
-    if (!Number.isFinite(amount) || amount <= 0) {
+    if (!Number.isFinite(amount) || amount <= 0 || amount > MAX_AMOUNT) {
       return NextResponse.json(
-        { error: "amount must be a positive number" },
+        { error: `amount must be a positive number up to ${MAX_AMOUNT}` },
+        { status: 400 }
+      );
+    }
+
+    if (
+      currency.length > MAX_STRING_LENGTH ||
+      agent.length > MAX_STRING_LENGTH ||
+      intent.length > MAX_STRING_LENGTH
+    ) {
+      return NextResponse.json(
+        { error: `parameters must not exceed ${MAX_STRING_LENGTH} characters` },
         { status: 400 }
       );
     }

@@ -70,6 +70,8 @@ function fallbackReply(message: string, liveRates: string): string {
   return `Entendí: «${message}». Probá consultar: «¿a cuánto está el USDT?», «¿cuánto tengo?», «mostrá reglas» o «ADF».`;
 }
 
+const MAX_MESSAGE_LENGTH = 2000;
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
@@ -77,6 +79,13 @@ export async function POST(req: NextRequest) {
 
     if (!message) {
       return NextResponse.json({ error: "message required" }, { status: 400 });
+    }
+
+    if (message.length > MAX_MESSAGE_LENGTH) {
+      return NextResponse.json(
+        { error: `Message exceeds maximum length limit of ${MAX_MESSAGE_LENGTH} characters` },
+        { status: 400 }
+      );
     }
 
     // 1. Busca os preços ao vivo diretamente da Belo
