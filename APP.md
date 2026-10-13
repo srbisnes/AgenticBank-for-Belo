@@ -24,4 +24,8 @@ Importá el repo, framework **Next.js**. Build: `next build`.
 - `/audit` Audit trail SHA-256
 - `POST /api/belo/execute` capa Belo simulada
 
+## Integración con Stellar Agent Layer
+
+Esta aplicación se complementa con [Stellar Agent Layer](https://github.com/srbisnes/stellar-agent-layer) para proveer un riel de liquidación agéntica en Stellar Testnet, facilitando operaciones cross-chain, intents de pago y Human-in-the-Loop gates.
+
 **Aviso:** prototipo independiente. No es producto oficial de Belo. No mueve dinero real.
