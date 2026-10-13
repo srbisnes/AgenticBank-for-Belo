@@ -67,6 +67,28 @@ export default function DashboardPage() {
 
       <DemoRunner />
 
+      <div className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+        <div className="space-y-1">
+          <div className="flex items-center gap-2">
+            <span className="inline-block h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+            <p className="font-[family-name:var(--font-sora)] text-sm font-medium text-[var(--fg)]">
+              Ecosistema: Stellar Agent Layer
+            </p>
+          </div>
+          <p className="text-xs text-[var(--muted)]">
+            Riel agéntico para liquidación en Stellar Testnet, intents de pago y Human-in-the-Loop gates.
+          </p>
+        </div>
+        <a
+          href="https://github.com/srbisnes/stellar-agent-layer"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="shrink-0 rounded-lg border border-[var(--primary)]/30 bg-[var(--primary)]/10 px-3 py-1.5 text-xs text-[var(--primary)] transition hover:bg-[var(--primary)]/20"
+        >
+          Ver repositorio ↗
+        </a>
+      </div>
+
       <div className="grid gap-4 lg:grid-cols-2">
         <section className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-5">
           <h2 className="mb-4 font-[family-name:var(--font-sora)] text-sm font-semibold text-[var(--fg)]">
