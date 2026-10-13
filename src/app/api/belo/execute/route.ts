@@ -9,9 +9,9 @@ export async function POST(req: NextRequest) {
   try {
     const body = (await req.json()) as Partial<ExecuteRequest>;
     const amount = Number(body.amount);
-    const currency = body.currency || "USD";
-    const agent = body.agent || "Freelancer";
-    const intent = body.intent || "allocate_income";
+    const rawCurrency = typeof body.currency === "string" ? body.currency.trim() : "USD";
+    const rawAgent = typeof body.agent === "string" ? body.agent.trim() : "Freelancer";
+    const rawIntent = typeof body.intent === "string" ? body.intent.trim() : "allocate_income";
 
     if (!Number.isFinite(amount) || amount <= 0) {
       return NextResponse.json(
@@ -19,6 +19,21 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
+
+    if (
+      rawCurrency.length > 50 ||
+      rawAgent.length > 50 ||
+      rawIntent.length > 50
+    ) {
+      return NextResponse.json(
+        { error: "input fields exceed maximum allowed length of 50 characters" },
+        { status: 400 }
+      );
+    }
+
+    const currency = rawCurrency || "USD";
+    const agent = rawAgent || "Freelancer";
+    const intent = rawIntent || "allocate_income";
 
     const event: BankEvent = {
       type: "income_received",
