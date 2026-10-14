@@ -5,23 +5,50 @@ import { initialBalances, initialGoals } from "@/lib/mock-data";
 
 export const runtime = "nodejs";
 
-// Busca cotações oficiais e em tempo real da Belo
+// Fast O(1) set lookup for tracked pair codes
+const TRACKED_PAIRS = new Set([
+  "USDT/ARS",
+  "USDC/ARS",
+  "USD/USDT",
+  "BRL/ARS",
+  "BTC/ARS",
+]);
+
+// ⚡ In-memory cache for live Belo rates (30s TTL)
+// Avoids repeated network latency (100-500ms) and array string transformation overhead on server requests
+let cachedRatesResult: string | null = null;
+let cacheExpiryTimestamp = 0;
+const CACHE_TTL_MS = 30_000;
+
+// Busca cotações oficiais e em tempo real da Belo com in-memory caching e O(1) Set filtering
 async function getLiveBeloRates(): Promise<string> {
+  const now = Date.now();
+  if (cachedRatesResult && now < cacheExpiryTimestamp) {
+    return cachedRatesResult;
+  }
+
   try {
     const res = await fetch("https://api.belo.app/public/price", {
-      next: { revalidate: 30 }, // Cache de 30 segundos
+      next: { revalidate: 30 }, // Cache de Next.js
     });
-    if (!res.ok) return "";
+    if (!res.ok) return cachedRatesResult || "";
     const pairs: Array<{ pairCode: string; ask: string; bid: string }> = await res.json();
-    
-    const tracked = ["USDT/ARS", "USDC/ARS", "USD/USDT", "BRL/ARS", "BTC/ARS"];
-    return pairs
-      .filter((p) => tracked.includes(p.pairCode))
-      .map((p) => `${p.pairCode}: Compra (Bid) = $${Number(p.bid).toLocaleString("es-AR")}, Venta (Ask) = $${Number(p.ask).toLocaleString("es-AR")}`)
+
+    // O(1) lookup per pair using Set.prototype.has
+    const formatted = pairs
+      .filter((p) => TRACKED_PAIRS.has(p.pairCode))
+      .map(
+        (p) =>
+          `${p.pairCode}: Compra (Bid) = $${Number(p.bid).toLocaleString("es-AR")}, Venta (Ask) = $${Number(p.ask).toLocaleString("es-AR")}`
+      )
       .join(" | ");
+
+    cachedRatesResult = formatted;
+    cacheExpiryTimestamp = now + CACHE_TTL_MS;
+    return formatted;
   } catch (err) {
     console.warn("Erro ao buscar preços ao vivo da Belo:", err);
-    return "USDT/ARS: Compra ~$1.608 / Venta ~$1.631";
+    return cachedRatesResult || "USDT/ARS: Compra ~$1.608 / Venta ~$1.631";
   }
 }
 
