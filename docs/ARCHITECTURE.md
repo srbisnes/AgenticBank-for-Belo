@@ -46,6 +46,14 @@ sequenceDiagram
 | Belo Integration | Capa de integración desacoplada | APIs simuladas en el prototipo |
 | Audit | SHA-256 chain, Risk score, Compliance matrices (diseño) | Trazabilidad |
 
+## Integración con Stellar Agent Layer
+
+AgenticBank para Belo se integra conceptualmente con [Stellar Agent Layer](https://github.com/srbisnes/stellar-agent-layer) como capa de ejecución desacoplada para operaciones Web3 / cross-chain.
+
+- **Rieles Stellar Testnet:** Ejecución descentralizada de intents de pago, liquidez y settlements en Stellar.
+- **Human-in-the-Loop:** Puertas de validación y límites de autonomía agéntica.
+- **Auditabilidad:** Registro de operaciones y trazabilidad cruzada.
+
 ## Endpoint simulado
 
 `POST /api/belo/execute` — **solo simulado en el prototipo**.
