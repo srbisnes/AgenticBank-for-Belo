@@ -25,37 +25,48 @@ async function getLiveBeloRates(): Promise<string> {
   }
 }
 
+// ⚡ Bolt Optimization: Pre-compile regex patterns at module level to avoid
+// re-compiling RegExp objects on every fallback search request.
+const DIACRITICS_REGEX = /[\u0300-\u036f]/g;
+const RATES_REGEX = /precio|cotiza|tasa|cuanto esta|usdt|dolar|ars|cambio/;
+const SAVINGS_REGEX = /ahorr|vault|fondo/;
+const BALANCE_REGEX = /saldo|balance|disponible|cuanto tengo/;
+const RULES_REGEX = /regla|rule|20/;
+const ADF_REGEX = /adf|autonom/;
+const GOALS_REGEX = /meta|goal|ahorrar/;
+const AGENTS_REGEX = /agente|agent/;
+
 function fallbackReply(message: string, liveRates: string): string {
   const q = message
     .toLowerCase()
     .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "");
+    .replace(DIACRITICS_REGEX, "");
 
-  if (/precio|cotiza|tasa|cuanto esta|usdt|dolar|ars|cambio/.test(q)) {
+  if (RATES_REGEX.test(q)) {
     return `Cotizaciones oficiales en vivo de Belo:\n${liveRates.split(" | ").map(r => `• ${r}`).join("\n")}\n\nPrecios tomados directamente de api.belo.app en tiempo real.`;
   }
-  if (/ahorr|vault|fondo/.test(q)) {
+  if (SAVINGS_REGEX.test(q)) {
     const g = initialGoals[0];
     return `Tenés USD ${initialBalances.vault.toLocaleString("es-AR")} en BELO_VAULT_SWEEP. Tu meta «${g.title}» va ${Math.round((g.currentAmount / g.targetAmount) * 100)}% (USD ${g.currentAmount.toLocaleString("es-AR")} / ${g.targetAmount.toLocaleString("es-AR")}). Con la regla 20/20/60, cada cobro suma automáticamente al vault.`;
   }
-  if (/saldo|balance|disponible|cuanto tengo/.test(q)) {
+  if (BALANCE_REGEX.test(q)) {
     const total =
       initialBalances.available +
       initialBalances.vault +
       initialBalances.taxEscrow;
     return `Saldos simulados: disponible USD ${initialBalances.available.toLocaleString("es-AR")}, vault ${initialBalances.vault.toLocaleString("es-AR")}, impuestos ${initialBalances.taxEscrow.toLocaleString("es-AR")}. Net worth ~ USD ${total.toLocaleString("es-AR")}.`;
   }
-  if (/regla|rule|20/.test(q)) {
+  if (RULES_REGEX.test(q)) {
     const rules = listRules()
       .map((r) => `• ${r.id}: ${r.description}`)
       .join("\n");
     return `Reglas activas del Rules Engine:\n${rules}`;
   }
-  if (/adf|autonom/.test(q)) {
+  if (ADF_REGEX.test(q)) {
     const current = adf(12, 48);
     return `ADF actual (simulado): ${current}%. Hipótesis de roadmap: Año 1 → ${targets.year1}% · Año 2 → ${targets.year2}% · Año 3 → ${targets.year3}%. ADF = decisiones de IA ejecutadas / decisiones financieras totales.`;
   }
-  if (/meta|goal|ahorrar/.test(q)) {
+  if (GOALS_REGEX.test(q)) {
     const lines = initialGoals
       .map(
         (g) =>
@@ -64,7 +75,7 @@ function fallbackReply(message: string, liveRates: string): string {
       .join("\n");
     return `Metas del Goal Engine:\n${lines}`;
   }
-  if (/agente|agent/.test(q)) {
+  if (AGENTS_REGEX.test(q)) {
     return `Agentes activos: Freelancer (ingresos), Travel (viajes/FX), Family Remittance (remesas), Treasury (cash flow), Investment & Yield. Cada uno opera solo dentro de límites que vos aprobás.`;
   }
   return `Entendí: «${message}». Probá consultar: «¿a cuánto está el USDT?», «¿cuánto tengo?», «mostrá reglas» o «ADF».`;
