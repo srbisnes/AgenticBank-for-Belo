@@ -5,6 +5,11 @@ import { initialBalances, initialGoals } from "@/lib/mock-data";
 
 export const runtime = "nodejs";
 
+// Performance Optimization: Hoist static Set and Intl.NumberFormat to module scope
+// to avoid recreating array/Set instances and expensive Intl formatter instances on every request.
+const TRACKED_PAIRS = new Set(["USDT/ARS", "USDC/ARS", "USD/USDT", "BRL/ARS", "BTC/ARS"]);
+const numberFormatter = new Intl.NumberFormat("es-AR");
+
 // Busca cotações oficiais e em tempo real da Belo
 async function getLiveBeloRates(): Promise<string> {
   try {
@@ -14,10 +19,9 @@ async function getLiveBeloRates(): Promise<string> {
     if (!res.ok) return "";
     const pairs: Array<{ pairCode: string; ask: string; bid: string }> = await res.json();
     
-    const tracked = ["USDT/ARS", "USDC/ARS", "USD/USDT", "BRL/ARS", "BTC/ARS"];
     return pairs
-      .filter((p) => tracked.includes(p.pairCode))
-      .map((p) => `${p.pairCode}: Compra (Bid) = $${Number(p.bid).toLocaleString("es-AR")}, Venta (Ask) = $${Number(p.ask).toLocaleString("es-AR")}`)
+      .filter((p) => TRACKED_PAIRS.has(p.pairCode))
+      .map((p) => `${p.pairCode}: Compra (Bid) = $${numberFormatter.format(Number(p.bid))}, Venta (Ask) = $${numberFormatter.format(Number(p.ask))}`)
       .join(" | ");
   } catch (err) {
     console.warn("Erro ao buscar preços ao vivo da Belo:", err);
