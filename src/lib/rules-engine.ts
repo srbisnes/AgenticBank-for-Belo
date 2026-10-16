@@ -69,23 +69,30 @@ export function evaluate(event: BankEvent): Action[] {
   return matched;
 }
 
+// Performance Optimization: Single-pass allocation calculation tracking running total and lastKey.
+// Avoids 3 Object.keys()/Object.values() array allocations and reduce() overhead per execution.
 export function applyAllocations(
   amount: number,
   actions: Action[]
 ): Record<string, number> {
   const result: Record<string, number> = {};
+  let total = 0;
+  let lastKey: string | null = null;
+
   for (const action of actions) {
     if (
       action.type === "allocate" &&
       action.rail &&
       typeof action.amount === "number"
     ) {
-      result[action.rail] = Math.round(action.amount * 100) / 100;
+      const val = Math.round(action.amount * 100) / 100;
+      total += val - (result[action.rail] ?? 0);
+      result[action.rail] = val;
+      lastKey = action.rail;
     }
   }
-  const total = Object.values(result).reduce((s, v) => s + v, 0);
-  if (Math.abs(total - amount) > 0.01 && Object.keys(result).length > 0) {
-    const lastKey = Object.keys(result).pop()!;
+
+  if (lastKey !== null && Math.abs(total - amount) > 0.01) {
     result[lastKey] =
       Math.round((result[lastKey] + (amount - total)) * 100) / 100;
   }
