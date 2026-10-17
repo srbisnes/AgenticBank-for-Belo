@@ -5,6 +5,16 @@ import { initialBalances, initialGoals } from "@/lib/mock-data";
 
 export const runtime = "nodejs";
 
+// Optimization: Reusable Set for O(1) pair lookup instead of O(M) array lookup
+const TRACKED_PAIRS = new Set(["USDT/ARS", "USDC/ARS", "USD/USDT", "BRL/ARS", "BTC/ARS"]);
+
+// Optimization: Reusable Intl.NumberFormat instance to avoid per-call V8 object creation overhead
+const esArFormatter = new Intl.NumberFormat("es-AR");
+
+function formatAmount(num: number): string {
+  return esArFormatter.format(num);
+}
+
 // Busca cotações oficiais e em tempo real da Belo
 async function getLiveBeloRates(): Promise<string> {
   try {
@@ -14,14 +24,17 @@ async function getLiveBeloRates(): Promise<string> {
     if (!res.ok) return "";
     const pairs: Array<{ pairCode: string; ask: string; bid: string }> = await res.json();
     
-    const tracked = ["USDT/ARS", "USDC/ARS", "USD/USDT", "BRL/ARS", "BTC/ARS"];
+    // Efficiently filter using Set.has and pre-format bullet points and newlines
     return pairs
-      .filter((p) => tracked.includes(p.pairCode))
-      .map((p) => `${p.pairCode}: Compra (Bid) = $${Number(p.bid).toLocaleString("es-AR")}, Venta (Ask) = $${Number(p.ask).toLocaleString("es-AR")}`)
-      .join(" | ");
+      .filter((p) => TRACKED_PAIRS.has(p.pairCode))
+      .map(
+        (p) =>
+          `• ${p.pairCode}: Compra (Bid) = $${formatAmount(Number(p.bid))}, Venta (Ask) = $${formatAmount(Number(p.ask))}`
+      )
+      .join("\n");
   } catch (err) {
     console.warn("Erro ao buscar preços ao vivo da Belo:", err);
-    return "USDT/ARS: Compra ~$1.608 / Venta ~$1.631";
+    return "• USDT/ARS: Compra ~$1.608 / Venta ~$1.631";
   }
 }
 
@@ -32,18 +45,19 @@ function fallbackReply(message: string, liveRates: string): string {
     .replace(/[\u0300-\u036f]/g, "");
 
   if (/precio|cotiza|tasa|cuanto esta|usdt|dolar|ars|cambio/.test(q)) {
-    return `Cotizaciones oficiales en vivo de Belo:\n${liveRates.split(" | ").map(r => `• ${r}`).join("\n")}\n\nPrecios tomados directamente de api.belo.app en tiempo real.`;
+    // Optimization: liveRates is already pre-formatted with newlines, eliminating split/map/join
+    return `Cotizaciones oficiales en vivo de Belo:\n${liveRates}\n\nPrecios tomados directamente de api.belo.app en tiempo real.`;
   }
   if (/ahorr|vault|fondo/.test(q)) {
     const g = initialGoals[0];
-    return `Tenés USD ${initialBalances.vault.toLocaleString("es-AR")} en BELO_VAULT_SWEEP. Tu meta «${g.title}» va ${Math.round((g.currentAmount / g.targetAmount) * 100)}% (USD ${g.currentAmount.toLocaleString("es-AR")} / ${g.targetAmount.toLocaleString("es-AR")}). Con la regla 20/20/60, cada cobro suma automáticamente al vault.`;
+    return `Tenés USD ${formatAmount(initialBalances.vault)} en BELO_VAULT_SWEEP. Tu meta «${g.title}» va ${Math.round((g.currentAmount / g.targetAmount) * 100)}% (USD ${formatAmount(g.currentAmount)} / ${formatAmount(g.targetAmount)}). Con la regla 20/20/60, cada cobro suma automáticamente al vault.`;
   }
   if (/saldo|balance|disponible|cuanto tengo/.test(q)) {
     const total =
       initialBalances.available +
       initialBalances.vault +
       initialBalances.taxEscrow;
-    return `Saldos simulados: disponible USD ${initialBalances.available.toLocaleString("es-AR")}, vault ${initialBalances.vault.toLocaleString("es-AR")}, impuestos ${initialBalances.taxEscrow.toLocaleString("es-AR")}. Net worth ~ USD ${total.toLocaleString("es-AR")}.`;
+    return `Saldos simulados: disponible USD ${formatAmount(initialBalances.available)}, vault ${formatAmount(initialBalances.vault)}, impuestos ${formatAmount(initialBalances.taxEscrow)}. Net worth ~ USD ${formatAmount(total)}.`;
   }
   if (/regla|rule|20/.test(q)) {
     const rules = listRules()
