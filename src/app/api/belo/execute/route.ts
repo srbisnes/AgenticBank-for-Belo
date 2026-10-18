@@ -8,14 +8,28 @@ export const runtime = "nodejs";
 export async function POST(req: NextRequest) {
   try {
     const body = (await req.json()) as Partial<ExecuteRequest>;
-    const amount = Number(body.amount);
-    const currency = body.currency || "USD";
-    const agent = body.agent || "Freelancer";
-    const intent = body.intent || "allocate_income";
-
-    if (!Number.isFinite(amount) || amount <= 0) {
+    if (!body || typeof body !== "object") {
       return NextResponse.json(
-        { error: "amount must be a positive number" },
+        { error: "Invalid request body" },
+        { status: 400 }
+      );
+    }
+
+    const amount = Number(body.amount);
+    if (!Number.isFinite(amount) || amount <= 0 || amount > 1_000_000_000) {
+      return NextResponse.json(
+        { error: "amount must be a positive number up to 1,000,000,000" },
+        { status: 400 }
+      );
+    }
+
+    const currency = typeof body.currency === "string" ? body.currency.trim() : "USD";
+    const agent = typeof body.agent === "string" ? body.agent.trim() : "Freelancer";
+    const intent = typeof body.intent === "string" ? body.intent.trim() : "allocate_income";
+
+    if (currency.length > 10 || agent.length > 50 || intent.length > 50) {
+      return NextResponse.json(
+        { error: "Invalid input length for text parameters" },
         { status: 400 }
       );
     }
