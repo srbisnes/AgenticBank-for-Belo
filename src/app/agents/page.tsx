@@ -48,6 +48,30 @@ export default function AgentsPage() {
         ))}
       </div>
 
+      <section className="rounded-xl border border-purple-500/30 bg-purple-950/10 p-5">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wider text-purple-400">
+              Ecosistema Cross-Chain
+            </p>
+            <h2 className="font-[family-name:var(--font-sora)] text-lg font-semibold text-[var(--fg)]">
+              Stellar Agent Layer Integration
+            </h2>
+          </div>
+          <a
+            href="https://github.com/srbisnes/stellar-agent-layer"
+            target="_blank"
+            rel="noreferrer"
+            className="rounded-lg border border-purple-500/50 bg-purple-500/20 px-3 py-1.5 text-xs font-semibold text-purple-300 hover:bg-purple-500/30"
+          >
+            Ver Repositorio ↗
+          </a>
+        </div>
+        <p className="mt-2 text-sm text-[var(--muted)]">
+          Capa de ejecución agéntica en Stellar Testnet con Intent Engine, off-ramp de USDC a ARS/fiat, compuerta de seguridad Human-in-the-Loop y soporte para Friendbot y Freighter.
+        </p>
+      </section>
+
       <section className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-5">
         <h2 className="mb-3 font-[family-name:var(--font-sora)] text-sm font-semibold">
           Rules Engine
