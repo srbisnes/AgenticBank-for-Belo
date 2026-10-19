@@ -42,7 +42,7 @@ sequenceDiagram
 | Frontend | Web App, Mobile App, Agent Chat | Interfaz, metas, dashboard |
 | AI Layer | Financial Copilot, Goal Engine, Decision Engine, Memory Layer, Risk Engine, Multi-Agent Orchestrator | Análisis, planificación, decisión y riesgo |
 | Agentes | Freelancer, Travel, Family, Treasury, Investment | Especialización por caso de uso |
-| Execution Layer | Payments, Transfers, PIX, Stablecoins, FX, Cards | Rieles de ejecución |
+| Execution Layer | Payments, Transfers, PIX, Stablecoins, FX, Cards, Stellar Agent Layer | Rieles de ejecución y liquidación en Stellar Testnet |
 | Belo Integration | Capa de integración desacoplada | APIs simuladas en el prototipo |
 | Audit | SHA-256 chain, Risk score, Compliance matrices (diseño) | Trazabilidad |
 
@@ -76,6 +76,13 @@ sequenceDiagram
   "risk_score": 98
 }
 ```
+
+## Integración con Stellar Agent Layer
+
+AgenticBank contempla la integración con [Stellar Agent Layer](https://github.com/srbisnes/stellar-agent-layer) como capa complementaria del ecosistema para:
+- Liquidación rápida on-chain en Stellar Testnet.
+- Generación de `PaymentIntent` para operaciones multi-moneda / FX (USDC/XLM → ARS/BRL).
+- Human-in-the-Loop gates para autorización explícita antes de la firma de transacciones valoradas.
 
 ## Compliance y privacidad
 

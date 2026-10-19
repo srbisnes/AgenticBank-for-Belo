@@ -52,6 +52,7 @@ export default function CopilotPage() {
     "¿Cuánto tengo ahorrado?",
     "Mostrá reglas activas",
     "ADF actual",
+    "Stellar Agent Layer",
     "Metas del Goal Engine",
     "Simular cobro USD 2.500",
   ];
