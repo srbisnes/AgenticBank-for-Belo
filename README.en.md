@@ -77,6 +77,7 @@ flowchart TB
   end
   subgraph Execution
     PAY[Payments / PIX / FX / Cards]
+    SAL[Stellar Agent Layer]
   end
   subgraph Belo
     API[Integration Layer — simulated]
@@ -84,6 +85,7 @@ flowchart TB
   Frontend --> AI Layer
   AI Layer --> Execution
   Execution --> Belo
+  Execution --> SAL
 ```
 
 ## Example: USD 2,500 income
@@ -131,9 +133,11 @@ npx tsx examples/demo.ts
 
 Reference port for the prototype: 3000.
 
-## Stack
+## Stack and Ecosystem
 
-React · TypeScript · Express (`server.ts`) · `@google/genai` (Gemini) · sample data throughout the prototype.
+React · TypeScript · Next.js · Tailwind CSS · `@google/genai` (Gemini) · Groq LPU · sample data throughout the prototype.
+
+**Agentic Ecosystem:** Conceptually integrated with [Stellar Agent Layer](https://github.com/srbisnes/stellar-agent-layer) as an agentic execution rail for Stellar Testnet settlement, payment intents, and Human-in-the-Loop safety gates.
 
 ## Two-stage plan (hypothesis)
 

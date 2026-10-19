@@ -64,6 +64,9 @@ function fallbackReply(message: string, liveRates: string): string {
       .join("\n");
     return `Metas del Goal Engine:\n${lines}`;
   }
+  if (/stellar|ecosistema|riel|layer|testnet/.test(q)) {
+    return `AgenticBank se integra con Stellar Agent Layer (srbisnes/stellar-agent-layer): un riel de ejecución agéntico en Stellar Testnet para liquidación instantánea, intents de pago y Human-in-the-Loop gates que garantizan que el usuario apruebe cada transacción.`;
+  }
   if (/agente|agent/.test(q)) {
     return `Agentes activos: Freelancer (ingresos), Travel (viajes/FX), Family Remittance (remesas), Treasury (cash flow), Investment & Yield. Cada uno opera solo dentro de límites que vos aprobás.`;
   }
@@ -96,7 +99,8 @@ Contexto financiero de Belo:
 - Saldos: Disponible USD ${initialBalances.available}, Vault USD ${initialBalances.vault}, Impuestos USD ${initialBalances.taxEscrow}.
 - Regla 20/20/60: 20% vault ahorro, 20% impuestos, 60% disponible.
 - ADF actual: 25%.
-- Rieles soportados: USD, USDT/USDC, ARS, BRL (PIX), MXN (SPEI), Belo Mastercard.
+- Rieles soportados: USD, USDT/USDC, ARS, BRL (PIX), MXN (SPEI), Belo Mastercard, Stellar Testnet (vía Stellar Agent Layer).
+- Ecosistema: Integrado con Stellar Agent Layer (srbisnes/stellar-agent-layer) para intents de pago agénticos en Stellar Testnet y Human-in-the-Loop security gates.
 
 Pautas:
 - Si el usuario pregunta cotizaciones, conversiones o precios, usá SIEMPRE las tasas exactas de Belo indicadas arriba.
