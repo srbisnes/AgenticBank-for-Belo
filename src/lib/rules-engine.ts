@@ -69,6 +69,8 @@ export function evaluate(event: BankEvent): Action[] {
   return matched;
 }
 
+// Performance optimization: Single call to Object.keys to iterate key totals and safely adjust rounding
+// difference on the final rail without double Object reflection or array mutation overhead.
 export function applyAllocations(
   amount: number,
   actions: Action[]
@@ -83,11 +85,21 @@ export function applyAllocations(
       result[action.rail] = Math.round(action.amount * 100) / 100;
     }
   }
-  const total = Object.values(result).reduce((s, v) => s + v, 0);
-  if (Math.abs(total - amount) > 0.01 && Object.keys(result).length > 0) {
-    const lastKey = Object.keys(result).pop()!;
+
+  const rails = Object.keys(result);
+  if (rails.length === 0) return result;
+
+  let total = 0;
+  for (let i = 0; i < rails.length; i++) {
+    total += result[rails[i]];
+  }
+  total = Math.round(total * 100) / 100;
+
+  if (Math.abs(total - amount) > 0.01) {
+    const lastKey = rails[rails.length - 1];
     result[lastKey] =
       Math.round((result[lastKey] + (amount - total)) * 100) / 100;
   }
+
   return result;
 }
