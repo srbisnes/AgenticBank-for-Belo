@@ -5,17 +5,25 @@ import type { BankEvent, ExecuteRequest, ExecuteResponse } from "@/lib/types";
 
 export const runtime = "nodejs";
 
+// Security helper: sanitize and truncate string inputs to prevent injection and oversized log payload attacks
+function sanitizeString(val: unknown, fallback: string, maxLen = 50): string {
+  if (typeof val !== "string") return fallback;
+  // Remove control characters and basic HTML markup brackets
+  const cleaned = val.replace(/[\x00-\x1F\x7F<>]/g, "").trim();
+  return (cleaned || fallback).slice(0, maxLen);
+}
+
 export async function POST(req: NextRequest) {
   try {
     const body = (await req.json()) as Partial<ExecuteRequest>;
     const amount = Number(body.amount);
-    const currency = body.currency || "USD";
-    const agent = body.agent || "Freelancer";
-    const intent = body.intent || "allocate_income";
+    const currency = sanitizeString(body.currency, "USD", 10);
+    const agent = sanitizeString(body.agent, "Freelancer", 50);
+    const intent = sanitizeString(body.intent, "allocate_income", 50);
 
-    if (!Number.isFinite(amount) || amount <= 0) {
+    if (!Number.isFinite(amount) || amount <= 0 || amount > Number.MAX_SAFE_INTEGER) {
       return NextResponse.json(
-        { error: "amount must be a positive number" },
+        { error: "amount must be a positive finite number within safe limits" },
         { status: 400 }
       );
     }
