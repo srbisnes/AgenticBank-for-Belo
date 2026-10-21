@@ -6,13 +6,16 @@ export class AuditTrail {
   private prevHash = "GENESIS";
 
   record(agent: string, decision: string): AuditRecord {
+    // Sanitize fields to prevent delimiter or newline injection in audit trail payloads
+    const cleanAgent = agent.replace(/[|\r\n]/g, " ");
+    const cleanDecision = decision.replace(/[|\r\n]/g, " ");
     const timestamp = new Date().toISOString();
-    const payload = `${this.records.length}|${agent}|${decision}|${timestamp}|${this.prevHash}`;
+    const payload = `${this.records.length}|${cleanAgent}|${cleanDecision}|${timestamp}|${this.prevHash}`;
     const hash = createHash("sha256").update(payload).digest("hex");
     const entry: AuditRecord = {
       index: this.records.length,
-      agent,
-      decision,
+      agent: cleanAgent,
+      decision: cleanDecision,
       timestamp,
       prevHash: this.prevHash,
       hash,
