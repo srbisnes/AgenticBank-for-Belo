@@ -9,13 +9,26 @@ export async function POST(req: NextRequest) {
   try {
     const body = (await req.json()) as Partial<ExecuteRequest>;
     const amount = Number(body.amount);
-    const currency = body.currency || "USD";
-    const agent = body.agent || "Freelancer";
-    const intent = body.intent || "allocate_income";
+    // Sanitize user inputs to prevent injection and enforce size bounds
+    const currency =
+      String(body.currency || "USD")
+        .toUpperCase()
+        .replace(/[^A-Z0-9_-]/g, "")
+        .slice(0, 10) || "USD";
+    const agent =
+      String(body.agent || "Freelancer")
+        .replace(/[^\w\s-]/g, "")
+        .trim()
+        .slice(0, 50) || "Freelancer";
+    const intent =
+      String(body.intent || "allocate_income")
+        .replace(/[^\w\s-]/g, "")
+        .trim()
+        .slice(0, 50) || "allocate_income";
 
-    if (!Number.isFinite(amount) || amount <= 0) {
+    if (!Number.isFinite(amount) || amount <= 0 || amount > 1_000_000_000) {
       return NextResponse.json(
-        { error: "amount must be a positive number" },
+        { error: "amount must be a positive number up to 1,000,000,000" },
         { status: 400 }
       );
     }
