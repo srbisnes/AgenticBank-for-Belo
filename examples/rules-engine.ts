@@ -72,15 +72,26 @@ export function evaluate(event: Event): Action[] {
 
 export function applyAllocations(amount: number, actions: Action[]): Record<string, number> {
   const result: Record<string, number> = {};
+  let total = 0;
+  let lastKey: string | null = null;
+
+  // Single-pass accumulation avoids intermediate Object.values() and Object.keys() array allocations
   for (const action of actions) {
     if (action.type === "allocate" && action.rail && typeof action.amount === "number") {
-      result[action.rail] = Math.round(action.amount * 100) / 100;
+      const rounded = Math.round(action.amount * 100) / 100;
+      const prev = result[action.rail];
+      if (prev !== undefined) {
+        total -= prev;
+      }
+      result[action.rail] = rounded;
+      total += rounded;
+      lastKey = action.rail;
     }
   }
-  const total = Object.values(result).reduce((s, v) => s + v, 0);
-  if (Math.abs(total - amount) > 0.01 && Object.keys(result).length > 0) {
-    const lastKey = Object.keys(result).pop()!;
+
+  if (lastKey !== null && Math.abs(total - amount) > 0.01) {
     result[lastKey] = Math.round((result[lastKey] + (amount - total)) * 100) / 100;
   }
+
   return result;
 }
