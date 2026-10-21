@@ -46,6 +46,16 @@ export default function PitchPage() {
               Arquitectura
             </a>
           </li>
+          <li>
+            <a
+              className="text-[var(--primary)] hover:underline"
+              href="https://github.com/srbisnes/stellar-agent-layer"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Capa de ejecución cross-chain (Stellar Agent Layer)
+            </a>
+          </li>
         </ul>
         <p className="border-t border-[var(--border)] pt-4 text-xs text-[var(--muted)]">
           Prototipo independiente · No es producto oficial de Belo · Cifras =

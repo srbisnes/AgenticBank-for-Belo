@@ -42,7 +42,7 @@ sequenceDiagram
 | Frontend | Web App, Mobile App, Agent Chat | Interfaz, metas, dashboard |
 | AI Layer | Financial Copilot, Goal Engine, Decision Engine, Memory Layer, Risk Engine, Multi-Agent Orchestrator | Análisis, planificación, decisión y riesgo |
 | Agentes | Freelancer, Travel, Family, Treasury, Investment | Especialización por caso de uso |
-| Execution Layer | Payments, Transfers, PIX, Stablecoins, FX, Cards | Rieles de ejecución |
+| Execution Layer | Payments, Transfers, PIX, Stablecoins, FX, Cards, Cross-Chain (Stellar Testnet) | Rieles de ejecución y liquidación cross-chain via [Stellar Agent Layer](https://github.com/srbisnes/stellar-agent-layer) |
 | Belo Integration | Capa de integración desacoplada | APIs simuladas en el prototipo |
 | Audit | SHA-256 chain, Risk score, Compliance matrices (diseño) | Trazabilidad |
 
@@ -76,6 +76,14 @@ sequenceDiagram
   "risk_score": 98
 }
 ```
+
+## Integración Cross-Chain (Stellar Agent Layer)
+
+Para operaciones internacionales, liquidez cross-chain y off-ramps locales (ej. USDC → ARS / CVU / CBU), AgenticBank se conecta conceptualmente con la capa de ejecución [Stellar Agent Layer](https://github.com/srbisnes/stellar-agent-layer). Esta capa proporciona:
+
+- **Rieles Stellar Testnet:** Fondeo con Friendbot y firmas de transacciones XLM/USDC.
+- **Off-Ramp Simulado:** Conversión directa de stablecoins a pesos argentinos (ARS) y transferencias bancarias.
+- **Human-in-the-Loop Gate:** Los agentes no firman directamente; generan un `PaymentIntent` que requiere autorización previa del usuario.
 
 ## Compliance y privacidad
 
