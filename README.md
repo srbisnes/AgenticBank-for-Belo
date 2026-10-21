@@ -6,6 +6,7 @@
 
 [![Status](https://img.shields.io/badge/status-prototype-orange)](https://github.com/srbisnes/AgenticBank-for-Belo)
 [![Stack](https://img.shields.io/badge/stack-React%20%7C%20TypeScript%20%7C%20Gemini-blue)](https://github.com/srbisnes/AgenticBank-for-Belo)
+[![Stellar Agent Layer](https://img.shields.io/badge/execution-Stellar%20Agent%20Layer-7D00FF)](https://github.com/srbisnes/stellar-agent-layer)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
 [Presentación inversores](docs/investors/index.html) · [Brief](docs/investors/INVESTOR_BRIEF.md) · [Arquitectura](docs/ARCHITECTURE.md) · [Roadmap](ROADMAP.md) · [English](README.en.md)
@@ -134,6 +135,8 @@ Puerto de referencia del prototipo: 3000.
 ## Stack
 
 React · TypeScript · Express (`server.ts`) · `@google/genai` (Gemini) · datos de ejemplo en todo el prototipo.
+
+Ecosistema y ejecución cross-chain complementaria: [Stellar Agent Layer](https://github.com/srbisnes/stellar-agent-layer) (rieles Stellar Testnet, pagos off-ramp USDC/ARS y Human-in-the-Loop).
 
 ## Plan en dos etapas (hipótesis)
 
