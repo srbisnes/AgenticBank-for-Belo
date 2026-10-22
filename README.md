@@ -53,6 +53,10 @@ flowchart LR
 
 **Agentes:** Freelancer · Travel · Family Remittance · Treasury · Investment & Yield
 
+## Ecosistema: Stellar Agent Layer
+
+AgenticBank para Belo se complementa con [Stellar Agent Layer](https://github.com/srbisnes/stellar-agent-layer), proporcionando rieles de ejecución en Stellar Testnet, intents de pago agénticos y guard rails Human-in-the-Loop para liquidación cross-chain.
+
 ## ADF — Autonomous Decision Factor
 
 ADF = Decisiones de IA ejecutadas / Decisiones financieras totales
