@@ -9,13 +9,28 @@ export async function POST(req: NextRequest) {
   try {
     const body = (await req.json()) as Partial<ExecuteRequest>;
     const amount = Number(body.amount);
-    const currency = body.currency || "USD";
-    const agent = body.agent || "Freelancer";
-    const intent = body.intent || "allocate_income";
 
-    if (!Number.isFinite(amount) || amount <= 0) {
+    // SECURITY: Input validation & sanitization for financial transaction params
+    const sanitizeParam = (val: unknown, maxLen = 50): string | null => {
+      if (val === undefined || val === null) return null;
+      if (typeof val !== "string") return null;
+      const trimmed = val.trim();
+      // Reject control characters, newlines, or excessively long strings
+      if (!trimmed || trimmed.length > maxLen || /[\r\n\0]/.test(trimmed)) return null;
+      return trimmed;
+    };
+
+    const currency = sanitizeParam(body.currency) ?? "USD";
+    const agent = sanitizeParam(body.agent) ?? "Freelancer";
+    const intent = sanitizeParam(body.intent) ?? "allocate_income";
+
+    if (
+      !Number.isFinite(amount) ||
+      amount <= 0 ||
+      amount > 1_000_000_000
+    ) {
       return NextResponse.json(
-        { error: "amount must be a positive number" },
+        { error: "Invalid input parameters" },
         { status: 400 }
       );
     }
