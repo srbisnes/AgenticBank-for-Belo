@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 
 type Row = {
   index: number;
@@ -15,7 +15,8 @@ export default function AuditPage() {
   const [valid, setValid] = useState<boolean | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const chainOk = useMemo(() => valid, [valid]);
+  // Directly reference primitive state value 'valid' instead of redundant useMemo hook
+  const chainOk = valid;
 
   async function generateSample() {
     setLoading(true);
