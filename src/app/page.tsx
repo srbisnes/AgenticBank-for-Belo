@@ -12,8 +12,10 @@ export default function DashboardPage() {
     initialBalances.vault +
     initialBalances.taxEscrow;
   const currentAdf = adf(12, 48);
-  const maxCash = Math.max(
-    ...cashFlowSeries.flatMap((c) => [c.income, c.expense])
+  // Performance: single reduce pass to calculate max value without flatMap array allocations & argument spreading
+  const maxCash = cashFlowSeries.reduce(
+    (max, c) => Math.max(max, c.income, c.expense),
+    0
   );
 
   return (
