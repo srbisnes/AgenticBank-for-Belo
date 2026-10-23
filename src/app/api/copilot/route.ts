@@ -5,6 +5,9 @@ import { initialBalances, initialGoals } from "@/lib/mock-data";
 
 export const runtime = "nodejs";
 
+// Hoist TRACKED_PAIRS to module scope as a Set for O(1) lookups without repeated array creations
+const TRACKED_PAIRS = new Set(["USDT/ARS", "USDC/ARS", "USD/USDT", "BRL/ARS", "BTC/ARS"]);
+
 // Busca cotações oficiais e em tempo real da Belo
 async function getLiveBeloRates(): Promise<string> {
   try {
@@ -14,11 +17,17 @@ async function getLiveBeloRates(): Promise<string> {
     if (!res.ok) return "";
     const pairs: Array<{ pairCode: string; ask: string; bid: string }> = await res.json();
     
-    const tracked = ["USDT/ARS", "USDC/ARS", "USD/USDT", "BRL/ARS", "BTC/ARS"];
-    return pairs
-      .filter((p) => tracked.includes(p.pairCode))
-      .map((p) => `${p.pairCode}: Compra (Bid) = $${Number(p.bid).toLocaleString("es-AR")}, Venta (Ask) = $${Number(p.ask).toLocaleString("es-AR")}`)
-      .join(" | ");
+    // Performance: single pass iteration and O(1) Set lookup instead of filter + map + Array.includes
+    const formatted: string[] = [];
+    for (let i = 0; i < pairs.length; i++) {
+      const p = pairs[i];
+      if (TRACKED_PAIRS.has(p.pairCode)) {
+        formatted.push(
+          `${p.pairCode}: Compra (Bid) = $${Number(p.bid).toLocaleString("es-AR")}, Venta (Ask) = $${Number(p.ask).toLocaleString("es-AR")}`
+        );
+      }
+    }
+    return formatted.join(" | ");
   } catch (err) {
     console.warn("Erro ao buscar preços ao vivo da Belo:", err);
     return "USDT/ARS: Compra ~$1.608 / Venta ~$1.631";
