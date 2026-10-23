@@ -42,9 +42,16 @@ sequenceDiagram
 | Frontend | Web App, Mobile App, Agent Chat | Interfaz, metas, dashboard |
 | AI Layer | Financial Copilot, Goal Engine, Decision Engine, Memory Layer, Risk Engine, Multi-Agent Orchestrator | Análisis, planificación, decisión y riesgo |
 | Agentes | Freelancer, Travel, Family, Treasury, Investment | Especialización por caso de uso |
-| Execution Layer | Payments, Transfers, PIX, Stablecoins, FX, Cards | Rieles de ejecución |
+| Execution Layer | Payments, Transfers, PIX, Stablecoins, FX, Cards, [Stellar Agent Layer](https://github.com/srbisnes/stellar-agent-layer) | Rieles de ejecución locales y cross-chain |
 | Belo Integration | Capa de integración desacoplada | APIs simuladas en el prototipo |
 | Audit | SHA-256 chain, Risk score, Compliance matrices (diseño) | Trazabilidad |
+
+## Integración con Stellar Agent Layer
+
+AgenticBank utiliza **[stellar-agent-layer](https://github.com/srbisnes/stellar-agent-layer)** como capa de ejecución cross-chain y liquidación en Stellar Testnet. Esta capa desacoplada permite:
+- **Ejecución agéntica multi-cadena:** Transferencias y swaps automatizados entre tokens de la red Stellar (XLM, USDC, EURC) y rieles locales LatAm.
+- **Contratos inteligentes Soroban:** Reglas de custodia temporal (*escrow*), liberación condicionada por Risk Engine y depósitos (*vault sweep*).
+- **Rieles de prueba en Stellar Testnet:** Verificación de flujo financiero agéntico sin comprometer fondos reales durante la fase de prototipo y sandbox.
 
 ## Endpoint simulado
 
