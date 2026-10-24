@@ -26,6 +26,8 @@ Usuarios de LatAm enfrentan múltiples monedas, inflación, pagos internacionale
 
 Sistema operativo financiero multi-agente que: analiza el comportamiento financiero, entiende metas, crea estrategias, recomienda acciones y ejecuta operaciones aprobadas a través de las APIs de Belo (simuladas).
 
+AgenticBank se integra conceptualmente con **[stellar-agent-layer](https://github.com/srbisnes/stellar-agent-layer)** como capa complementaria del ecosistema para la ejecución agéntica cross-chain, rieles de pago en Stellar Testnet y liquidez multimoneda con contratos Soroban.
+
 ```mermaid
 flowchart LR
   A[Meta del usuario] --> B[Goal Engine]
@@ -133,7 +135,7 @@ Puerto de referencia del prototipo: 3000.
 
 ## Stack
 
-React · TypeScript · Express (`server.ts`) · `@google/genai` (Gemini) · datos de ejemplo en todo el prototipo.
+React · TypeScript · Express (`server.ts`) · `@google/genai` (Gemini) · [stellar-agent-layer](https://github.com/srbisnes/stellar-agent-layer) (capa de ejecución cross-chain / Stellar) · datos de ejemplo en todo el prototipo.
 
 ## Plan en dos etapas (hipótesis)
 
