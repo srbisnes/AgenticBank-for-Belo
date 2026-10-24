@@ -9,13 +9,20 @@ export async function POST(req: NextRequest) {
   try {
     const body = (await req.json()) as Partial<ExecuteRequest>;
     const amount = Number(body.amount);
-    const currency = body.currency || "USD";
-    const agent = body.agent || "Freelancer";
-    const intent = body.intent || "allocate_income";
+    const currency = typeof body.currency === "string" ? body.currency : "USD";
+    const agent = typeof body.agent === "string" ? body.agent : "Freelancer";
+    const intent = typeof body.intent === "string" ? body.intent : "allocate_income";
 
-    if (!Number.isFinite(amount) || amount <= 0) {
+    if (!Number.isFinite(amount) || amount <= 0 || amount > 1_000_000_000) {
       return NextResponse.json(
-        { error: "amount must be a positive number" },
+        { error: "amount must be a positive number up to 1,000,000,000" },
+        { status: 400 }
+      );
+    }
+
+    if (currency.length > 10 || agent.length > 100 || intent.length > 100) {
+      return NextResponse.json(
+        { error: "input parameters exceed allowed character length limits" },
         { status: 400 }
       );
     }

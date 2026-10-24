@@ -73,10 +73,18 @@ function fallbackReply(message: string, liveRates: string): string {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const message = String(body.message || "").trim();
+    const rawMessage = typeof body?.message === "string" ? body.message : "";
+    const message = rawMessage.trim();
 
     if (!message) {
       return NextResponse.json({ error: "message required" }, { status: 400 });
+    }
+
+    if (message.length > 2000) {
+      return NextResponse.json(
+        { error: "message exceeds maximum length limit of 2000 characters" },
+        { status: 400 }
+      );
     }
 
     // 1. Busca os preços ao vivo diretamente da Belo
