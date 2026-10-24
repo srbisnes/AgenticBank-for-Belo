@@ -5,6 +5,15 @@ import { initialBalances, initialGoals } from "@/lib/mock-data";
 
 export const runtime = "nodejs";
 
+// Performance optimization: Static Set for O(1) currency pair lookups across requests.
+const TRACKED_PAIRS = new Set([
+  "USDT/ARS",
+  "USDC/ARS",
+  "USD/USDT",
+  "BRL/ARS",
+  "BTC/ARS",
+]);
+
 // Busca cotações oficiais e em tempo real da Belo
 async function getLiveBeloRates(): Promise<string> {
   try {
@@ -14,9 +23,8 @@ async function getLiveBeloRates(): Promise<string> {
     if (!res.ok) return "";
     const pairs: Array<{ pairCode: string; ask: string; bid: string }> = await res.json();
     
-    const tracked = ["USDT/ARS", "USDC/ARS", "USD/USDT", "BRL/ARS", "BTC/ARS"];
     return pairs
-      .filter((p) => tracked.includes(p.pairCode))
+      .filter((p) => TRACKED_PAIRS.has(p.pairCode))
       .map((p) => `${p.pairCode}: Compra (Bid) = $${Number(p.bid).toLocaleString("es-AR")}, Venta (Ask) = $${Number(p.ask).toLocaleString("es-AR")}`)
       .join(" | ");
   } catch (err) {
