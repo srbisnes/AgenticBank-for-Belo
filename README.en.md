@@ -135,6 +135,8 @@ Reference port for the prototype: 3000.
 
 React · TypeScript · Express (`server.ts`) · `@google/genai` (Gemini) · sample data throughout the prototype.
 
+Complementary ecosystem and cross-chain execution: [Stellar Agent Layer](https://github.com/srbisnes/stellar-agent-layer) (Stellar Testnet rails, USDC/ARS off-ramp payments, and Human-in-the-Loop).
+
 ## Two-stage plan (hypothesis)
 
 **Months 1–12:** validate and fund (demo, grants, Belo sandbox, beta 100–500 users, ADF ≥ 20%).
