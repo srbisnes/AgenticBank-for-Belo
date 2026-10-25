@@ -14,18 +14,26 @@ export interface AuditRecord {
   hash: string;
 }
 
+function sanitizeAuditField(val: unknown): string {
+  if (typeof val !== "string") return "";
+  // Sanitize control characters/newlines and escape pipe '|' delimiter to prevent audit payload injection
+  return val.replace(/[\r\n\x00-\x1f]/g, " ").replace(/\|/g, "\\|").trim();
+}
+
 export class AuditTrail {
   private records: AuditRecord[] = [];
   private prevHash = "GENESIS";
 
   record(agent: string, decision: string): AuditRecord {
+    const cleanAgent = sanitizeAuditField(agent);
+    const cleanDecision = sanitizeAuditField(decision);
     const timestamp = new Date().toISOString();
-    const payload = `${this.records.length}|${agent}|${decision}|${timestamp}|${this.prevHash}`;
+    const payload = `${this.records.length}|${cleanAgent}|${cleanDecision}|${timestamp}|${this.prevHash}`;
     const hash = createHash("sha256").update(payload).digest("hex");
     const entry: AuditRecord = {
       index: this.records.length,
-      agent,
-      decision,
+      agent: cleanAgent,
+      decision: cleanDecision,
       timestamp,
       prevHash: this.prevHash,
       hash,
