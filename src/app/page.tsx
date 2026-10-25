@@ -6,15 +6,18 @@ import {
   initialGoals,
 } from "@/lib/mock-data";
 
+// Performance optimization: Calculate maxCash at module level once instead of executing
+// flatMap array allocations and Math.max spread on every component render.
+const maxCash = Math.max(
+  ...cashFlowSeries.flatMap((c) => [c.income, c.expense])
+);
+
 export default function DashboardPage() {
   const netWorth =
     initialBalances.available +
     initialBalances.vault +
     initialBalances.taxEscrow;
   const currentAdf = adf(12, 48);
-  const maxCash = Math.max(
-    ...cashFlowSeries.flatMap((c) => [c.income, c.expense])
-  );
 
   return (
     <div className="mx-auto max-w-5xl space-y-6">

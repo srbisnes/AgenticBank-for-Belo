@@ -4,6 +4,17 @@ import { useState } from "react";
 
 type Msg = { role: "user" | "assistant"; content: string };
 
+// Performance optimization: Move static chips array outside component to avoid
+// re-allocating array instance on every keystroke/render pass.
+const CHIPS = [
+  "¿A cuánto está el USDT?",
+  "¿Cuánto tengo ahorrado?",
+  "Mostrá reglas activas",
+  "ADF actual",
+  "Metas del Goal Engine",
+  "Simular cobro USD 2.500",
+];
+
 export default function CopilotPage() {
   const [messages, setMessages] = useState<Msg[]>([
     {
@@ -47,15 +58,6 @@ export default function CopilotPage() {
     }
   }
 
-  const chips = [
-    "¿A cuánto está el USDT?",
-    "¿Cuánto tengo ahorrado?",
-    "Mostrá reglas activas",
-    "ADF actual",
-    "Metas del Goal Engine",
-    "Simular cobro USD 2.500",
-  ];
-
   return (
     <div className="mx-auto flex h-[calc(100vh-4rem)] max-w-3xl flex-col">
       <header className="mb-4">
@@ -91,7 +93,7 @@ export default function CopilotPage() {
 
         <div className="border-t border-[var(--border)] p-3">
           <div className="mb-2 flex flex-wrap gap-1">
-            {chips.map((c) => (
+            {CHIPS.map((c) => (
               <button
                 key={c}
                 type="button"

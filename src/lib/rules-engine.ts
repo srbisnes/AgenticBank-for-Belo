@@ -74,18 +74,26 @@ export function applyAllocations(
   actions: Action[]
 ): Record<string, number> {
   const result: Record<string, number> = {};
+  let total = 0;
+  let lastKey = "";
+
+  // Performance optimization: Calculate running total and track the last rail in a single pass
+  // to avoid redundant Object.values() and Object.keys() temporary array allocations.
   for (const action of actions) {
     if (
       action.type === "allocate" &&
       action.rail &&
       typeof action.amount === "number"
     ) {
-      result[action.rail] = Math.round(action.amount * 100) / 100;
+      const allocated = Math.round(action.amount * 100) / 100;
+      const prev = result[action.rail] || 0;
+      result[action.rail] = allocated;
+      total += allocated - prev;
+      lastKey = action.rail;
     }
   }
-  const total = Object.values(result).reduce((s, v) => s + v, 0);
-  if (Math.abs(total - amount) > 0.01 && Object.keys(result).length > 0) {
-    const lastKey = Object.keys(result).pop()!;
+
+  if (Math.abs(total - amount) > 0.01 && lastKey) {
     result[lastKey] =
       Math.round((result[lastKey] + (amount - total)) * 100) / 100;
   }
