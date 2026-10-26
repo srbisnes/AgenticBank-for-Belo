@@ -135,6 +135,8 @@ Puerto de referencia del prototipo: 3000.
 
 React · TypeScript · Express (`server.ts`) · `@google/genai` (Gemini) · datos de ejemplo en todo el prototipo.
 
+Ecosistema y ejecución cross-chain complementaria: [Stellar Agent Layer](https://github.com/srbisnes/stellar-agent-layer) (rieles Stellar Testnet, pagos off-ramp USDC/ARS y Human-in-the-Loop).
+
 ## Plan en dos etapas (hipótesis)
 
 **Meses 1–12:** validar y financiar (demo, grants, sandbox Belo, beta 100–500 usuarios, ADF ≥ 20%).
