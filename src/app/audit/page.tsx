@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 
 type Row = {
   index: number;
@@ -14,8 +14,6 @@ export default function AuditPage() {
   const [rows, setRows] = useState<Row[]>([]);
   const [valid, setValid] = useState<boolean | null>(null);
   const [loading, setLoading] = useState(false);
-
-  const chainOk = useMemo(() => valid, [valid]);
 
   async function generateSample() {
     setLoading(true);
@@ -81,13 +79,13 @@ export default function AuditPage() {
         </button>
       </header>
 
-      {chainOk !== null && (
+      {valid !== null && (
         <p
           className={`text-sm ${
-            chainOk ? "text-emerald-300" : "text-red-300"
+            valid ? "text-emerald-300" : "text-red-300"
           }`}
         >
-          audit chain valid: {String(chainOk)}
+          audit chain valid: {String(valid)}
         </p>
       )}
 
