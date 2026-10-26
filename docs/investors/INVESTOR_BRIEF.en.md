@@ -27,6 +27,7 @@ Multi-agent financial operating system that analyses financial behaviour, unders
 - Goal Engine, Rules Engine, multi-agent orchestrator (Freelancer, Travel, Family, Treasury, Investment).
 - SHA-256 audit, simulated Risk Engine, killswitch, simulated API console.
 - ADF meter and projection simulator.
+- Complementary cross-chain execution rails via [Stellar Agent Layer](https://github.com/srbisnes/stellar-agent-layer) (Stellar Testnet, USDC/ARS off-ramp, and Human-in-the-Loop).
 
 **What is missing:** real Belo integration, real-money execution, legal review and operational compliance, users and revenue.
 
