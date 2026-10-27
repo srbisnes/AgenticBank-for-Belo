@@ -77,6 +77,7 @@ flowchart TB
   end
   subgraph Execution
     PAY[Payments / PIX / FX / Cards]
+    SAL[Stellar Agent Layer]
   end
   subgraph Belo
     API[Integration Layer — simulated]
@@ -85,6 +86,10 @@ flowchart TB
   AI Layer --> Execution
   Execution --> Belo
 ```
+
+### Ecosystem Layer & Cross-Chain Execution
+
+AgenticBank conceptually links to **[stellar-agent-layer](https://github.com/srbisnes/stellar-agent-layer)** as a complementary ecosystem layer for cross-chain agent execution, Stellar Testnet payment rails, and multi-currency liquidity settlement via Soroban smart contracts.
 
 ## Example: USD 2,500 income
 
@@ -133,7 +138,7 @@ Reference port for the prototype: 3000.
 
 ## Stack
 
-React · TypeScript · Express (`server.ts`) · `@google/genai` (Gemini) · sample data throughout the prototype.
+React · TypeScript · Express (`server.ts`) · `@google/genai` (Gemini) · [stellar-agent-layer](https://github.com/srbisnes/stellar-agent-layer) (cross-chain execution / Stellar layer) · sample data throughout the prototype.
 
 ## Two-stage plan (hypothesis)
 
