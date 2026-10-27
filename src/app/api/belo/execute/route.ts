@@ -20,6 +20,18 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Security: Validate and sanitize string inputs to prevent log/audit injection & DoS
+    if (
+      typeof currency !== "string" || currency.length > 10 ||
+      typeof agent !== "string" || agent.length > 50 ||
+      typeof intent !== "string" || intent.length > 50
+    ) {
+      return NextResponse.json(
+        { error: "Invalid string input parameters" },
+        { status: 400 }
+      );
+    }
+
     const event: BankEvent = {
       type: "income_received",
       amount,
