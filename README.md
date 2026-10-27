@@ -77,6 +77,7 @@ flowchart TB
   end
   subgraph Execution
     PAY[Payments / PIX / FX / Cards]
+    SAL[Stellar Agent Layer]
   end
   subgraph Belo
     API[Integration Layer — simulada]
@@ -85,6 +86,10 @@ flowchart TB
   AI Layer --> Execution
   Execution --> Belo
 ```
+
+### Capa de Ecosistema y Ejecución Cross-Chain
+
+AgenticBank se integra conceptualmente con **[stellar-agent-layer](https://github.com/srbisnes/stellar-agent-layer)** como capa complementaria del ecosistema para la ejecución agéntica cross-chain, rieles de pago en Stellar Testnet y liquidez multimoneda con contratos Soroban.
 
 ## Ejemplo: cobro de USD 2.500
 
@@ -133,7 +138,7 @@ Puerto de referencia del prototipo: 3000.
 
 ## Stack
 
-React · TypeScript · Express (`server.ts`) · `@google/genai` (Gemini) · datos de ejemplo en todo el prototipo.
+React · TypeScript · Express (`server.ts`) · `@google/genai` (Gemini) · [stellar-agent-layer](https://github.com/srbisnes/stellar-agent-layer) (capa de ejecución cross-chain / Stellar) · datos de ejemplo en todo el prototipo.
 
 ## Plan en dos etapas (hipótesis)
 
