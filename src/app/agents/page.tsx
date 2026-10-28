@@ -49,6 +49,29 @@ export default function AgentsPage() {
       </div>
 
       <section className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-5">
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="font-[family-name:var(--font-sora)] text-sm font-semibold">
+            Capa de Ejecución Cross-Chain
+          </h2>
+          <span className="rounded bg-[var(--primary)]/10 px-2 py-0.5 text-[10px] text-[var(--primary)] font-medium">
+            Stellar Testnet
+          </span>
+        </div>
+        <p className="text-sm text-[var(--muted)] mb-3">
+          Integración directa con{" "}
+          <a
+            href="https://github.com/srbisnes/stellar-agent-layer"
+            target="_blank"
+            rel="noreferrer"
+            className="text-[var(--primary)] hover:underline font-medium"
+          >
+            Stellar Agent Layer
+          </a>{" "}
+          para liquidez descentralizada, off-ramps USDC → ARS y portal con confirmación Human-in-the-Loop.
+        </p>
+      </section>
+
+      <section className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-5">
         <h2 className="mb-3 font-[family-name:var(--font-sora)] text-sm font-semibold">
           Rules Engine
         </h2>

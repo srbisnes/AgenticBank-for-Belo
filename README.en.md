@@ -7,8 +7,9 @@
 [![Status](https://img.shields.io/badge/status-prototype-orange)](https://github.com/srbisnes/AgenticBank-for-Belo)
 [![Stack](https://img.shields.io/badge/stack-React%20%7C%20TypeScript%20%7C%20Gemini-blue)](https://github.com/srbisnes/AgenticBank-for-Belo)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+[![Stellar Agent Layer](https://img.shields.io/badge/Cross--Chain-Stellar%20Agent%20Layer-7D00FF)](https://github.com/srbisnes/stellar-agent-layer)
 
-[Investor deck](docs/investors/index.html) · [Brief](docs/investors/INVESTOR_BRIEF.en.md) · [Architecture](docs/ARCHITECTURE.md) · [Roadmap](ROADMAP.md) · [Español](README.md)
+[Investor deck](docs/investors/index.html) · [Brief](docs/investors/INVESTOR_BRIEF.en.md) · [Architecture](docs/ARCHITECTURE.md) · [Roadmap](ROADMAP.md) · [Stellar Agent Layer](https://github.com/srbisnes/stellar-agent-layer) · [Español](README.md)
 
 </div>
 
@@ -131,9 +132,16 @@ npx tsx examples/demo.ts
 
 Reference port for the prototype: 3000.
 
+## Ecosystem Integration (Stellar Agent Layer)
+
+AgenticBank is complemented by the cross-chain execution layer [Stellar Agent Layer](https://github.com/srbisnes/stellar-agent-layer). This layer extends the system for decentralized operations:
+- **Stellar Testnet Rails:** Automatic funding via Friendbot and signature management for XLM/USDC transactions.
+- **Local Off-Ramps (USDC → ARS):** Simulated settlement to local CBU/CVU/Alias accounts (Mercado Pago, Lemon, Santander, etc.).
+- **Human-in-the-Loop Gate:** Agents generate payment intents (`PaymentIntent`) requiring explicit user confirmation before signing.
+
 ## Stack
 
-React · TypeScript · Express (`server.ts`) · `@google/genai` (Gemini) · sample data throughout the prototype.
+React · TypeScript · Express (`server.ts`) · `@google/genai` (Gemini) · Stellar Agent Layer (Stellar Testnet) · sample data throughout the prototype.
 
 ## Two-stage plan (hypothesis)
 
