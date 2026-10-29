@@ -4,14 +4,26 @@ import { useState } from "react";
 
 type Msg = { role: "user" | "assistant"; content: string };
 
+// Bolt ⚡ Optimization: Hoist static data outside component scope to prevent object & array allocations on every render
+const CHIPS = [
+  "¿A cuánto está el USDT?",
+  "¿Cuánto tengo ahorrado?",
+  "Mostrá reglas activas",
+  "ADF actual",
+  "Metas del Goal Engine",
+  "Simular cobro USD 2.500",
+] as const;
+
+const INITIAL_MESSAGES: Msg[] = [
+  {
+    role: "assistant",
+    content:
+      "¡Hola Rodrigo! Soy tu Copiloto Financiero para Belo. Podés consultarme sobre saldos, cotizaciones en vivo (USDT/BRL/ARS), metas de ahorro o la regla 20/20/60.",
+  },
+];
+
 export default function CopilotPage() {
-  const [messages, setMessages] = useState<Msg[]>([
-    {
-      role: "assistant",
-      content:
-        "¡Hola Rodrigo! Soy tu Copiloto Financiero para Belo. Podés consultarme sobre saldos, cotizaciones en vivo (USDT/BRL/ARS), metas de ahorro o la regla 20/20/60.",
-    },
-  ]);
+  const [messages, setMessages] = useState<Msg[]>(INITIAL_MESSAGES);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -46,15 +58,6 @@ export default function CopilotPage() {
       setLoading(false);
     }
   }
-
-  const chips = [
-    "¿A cuánto está el USDT?",
-    "¿Cuánto tengo ahorrado?",
-    "Mostrá reglas activas",
-    "ADF actual",
-    "Metas del Goal Engine",
-    "Simular cobro USD 2.500",
-  ];
 
   return (
     <div className="mx-auto flex h-[calc(100vh-4rem)] max-w-3xl flex-col">
@@ -91,7 +94,7 @@ export default function CopilotPage() {
 
         <div className="border-t border-[var(--border)] p-3">
           <div className="mb-2 flex flex-wrap gap-1">
-            {chips.map((c) => (
+            {CHIPS.map((c) => (
               <button
                 key={c}
                 type="button"

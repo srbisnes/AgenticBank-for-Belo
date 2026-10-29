@@ -6,16 +6,42 @@ import {
   initialGoals,
 } from "@/lib/mock-data";
 
-export default function DashboardPage() {
-  const netWorth =
-    initialBalances.available +
-    initialBalances.vault +
-    initialBalances.taxEscrow;
-  const currentAdf = adf(12, 48);
-  const maxCash = Math.max(
-    ...cashFlowSeries.flatMap((c) => [c.income, c.expense])
-  );
+// Bolt ⚡ Optimization: Pre-compute static values and metric structure outside render loop
+// to avoid repeated flatMap array allocations and math calculations on every render.
+const NET_WORTH =
+  initialBalances.available +
+  initialBalances.vault +
+  initialBalances.taxEscrow;
+const CURRENT_ADF = adf(12, 48);
 
+let maxVal = 0;
+for (const c of cashFlowSeries) {
+  if (c.income > maxVal) maxVal = c.income;
+  if (c.expense > maxVal) maxVal = c.expense;
+}
+const MAX_CASH = maxVal;
+
+const METRIC_CARDS = [
+  {
+    label: "Net Worth",
+    value: `USD ${NET_WORTH.toLocaleString("es-AR")}`,
+  },
+  {
+    label: "Disponible",
+    value: `USD ${initialBalances.available.toLocaleString("es-AR")}`,
+  },
+  {
+    label: "Vault",
+    value: `USD ${initialBalances.vault.toLocaleString("es-AR")}`,
+  },
+  {
+    label: "ADF",
+    value: `${CURRENT_ADF}%`,
+    sub: `meta Y1 ${targets.year1}%`,
+  },
+] as const;
+
+export default function DashboardPage() {
   return (
     <div className="mx-auto max-w-5xl space-y-6">
       <header>
@@ -31,25 +57,7 @@ export default function DashboardPage() {
       </header>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {[
-          {
-            label: "Net Worth",
-            value: `USD ${netWorth.toLocaleString("es-AR")}`,
-          },
-          {
-            label: "Disponible",
-            value: `USD ${initialBalances.available.toLocaleString("es-AR")}`,
-          },
-          {
-            label: "Vault",
-            value: `USD ${initialBalances.vault.toLocaleString("es-AR")}`,
-          },
-          {
-            label: "ADF",
-            value: `${currentAdf}%`,
-            sub: `meta Y1 ${targets.year1}%`,
-          },
-        ].map((c) => (
+        {METRIC_CARDS.map((c) => (
           <div
             key={c.label}
             className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-4"
@@ -78,12 +86,12 @@ export default function DashboardPage() {
                 <div className="flex h-32 w-full items-end justify-center gap-0.5">
                   <div
                     className="w-2 rounded-t bg-[var(--primary)]/80"
-                    style={{ height: `${(m.income / maxCash) * 100}%` }}
+                    style={{ height: `${(m.income / MAX_CASH) * 100}%` }}
                     title={`Ingreso ${m.income}`}
                   />
                   <div
                     className="w-2 rounded-t bg-[var(--muted)]/40"
-                    style={{ height: `${(m.expense / maxCash) * 100}%` }}
+                    style={{ height: `${(m.expense / MAX_CASH) * 100}%` }}
                     title={`Gasto ${m.expense}`}
                   />
                 </div>

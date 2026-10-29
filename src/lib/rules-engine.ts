@@ -69,23 +69,34 @@ export function evaluate(event: BankEvent): Action[] {
   return matched;
 }
 
+// Bolt ⚡ Optimization: Calculates total allocations and tracks last rail key
+// in a single pass O(N) to avoid Object.values(), Object.keys(), and array/closure allocations.
 export function applyAllocations(
   amount: number,
   actions: Action[]
 ): Record<string, number> {
   const result: Record<string, number> = {};
+  let total = 0;
+  let lastKey = "";
+
   for (const action of actions) {
     if (
       action.type === "allocate" &&
       action.rail &&
       typeof action.amount === "number"
     ) {
-      result[action.rail] = Math.round(action.amount * 100) / 100;
+      const roundedVal = Math.round(action.amount * 100) / 100;
+      if (result[action.rail] !== undefined) {
+        total -= result[action.rail];
+      }
+      result[action.rail] = roundedVal;
+      total += roundedVal;
+      lastKey = action.rail;
     }
   }
-  const total = Object.values(result).reduce((s, v) => s + v, 0);
-  if (Math.abs(total - amount) > 0.01 && Object.keys(result).length > 0) {
-    const lastKey = Object.keys(result).pop()!;
+
+  // Adjust for floating point rounding discrepancies if needed
+  if (Math.abs(total - amount) > 0.01 && lastKey !== "") {
     result[lastKey] =
       Math.round((result[lastKey] + (amount - total)) * 100) / 100;
   }
