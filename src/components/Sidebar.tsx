@@ -45,7 +45,18 @@ export function Sidebar() {
           );
         })}
       </nav>
-      <p className="mt-4 px-2 text-[10px] leading-relaxed text-[var(--muted)]">
+      <div className="mt-4 border-t border-[var(--border)] pt-3 px-2">
+        <a
+          href="https://github.com/srbisnes/stellar-agent-layer"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center justify-between rounded-md bg-white/5 px-2.5 py-1.5 text-xs text-[var(--muted)] transition hover:bg-white/10 hover:text-[var(--primary)]"
+        >
+          <span>Stellar Agent Layer</span>
+          <span className="text-[10px]">↗</span>
+        </a>
+      </div>
+      <p className="mt-2 px-2 text-[10px] leading-relaxed text-[var(--muted)]">
         No es producto oficial de Belo. No mueve dinero real. APIs simuladas.
       </p>
     </aside>
