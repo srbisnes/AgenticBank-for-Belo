@@ -6,16 +6,17 @@ import {
   initialGoals,
 } from "@/lib/mock-data";
 
-export default function DashboardPage() {
-  const netWorth =
-    initialBalances.available +
-    initialBalances.vault +
-    initialBalances.taxEscrow;
-  const currentAdf = adf(12, 48);
-  const maxCash = Math.max(
-    ...cashFlowSeries.flatMap((c) => [c.income, c.expense])
-  );
+// Pre-calculate static values outside render function to avoid array allocations (flatMap) and recalculations on every render pass
+const NET_WORTH =
+  initialBalances.available +
+  initialBalances.vault +
+  initialBalances.taxEscrow;
+const CURRENT_ADF = adf(12, 48);
+const MAX_CASH = Math.max(
+  ...cashFlowSeries.flatMap((c) => [c.income, c.expense])
+);
 
+export default function DashboardPage() {
   return (
     <div className="mx-auto max-w-5xl space-y-6">
       <header>
@@ -34,7 +35,7 @@ export default function DashboardPage() {
         {[
           {
             label: "Net Worth",
-            value: `USD ${netWorth.toLocaleString("es-AR")}`,
+            value: `USD ${NET_WORTH.toLocaleString("es-AR")}`,
           },
           {
             label: "Disponible",
@@ -46,7 +47,7 @@ export default function DashboardPage() {
           },
           {
             label: "ADF",
-            value: `${currentAdf}%`,
+            value: `${CURRENT_ADF}%`,
             sub: `meta Y1 ${targets.year1}%`,
           },
         ].map((c) => (
@@ -78,12 +79,12 @@ export default function DashboardPage() {
                 <div className="flex h-32 w-full items-end justify-center gap-0.5">
                   <div
                     className="w-2 rounded-t bg-[var(--primary)]/80"
-                    style={{ height: `${(m.income / maxCash) * 100}%` }}
+                    style={{ height: `${(m.income / MAX_CASH) * 100}%` }}
                     title={`Ingreso ${m.income}`}
                   />
                   <div
                     className="w-2 rounded-t bg-[var(--muted)]/40"
-                    style={{ height: `${(m.expense / maxCash) * 100}%` }}
+                    style={{ height: `${(m.expense / MAX_CASH) * 100}%` }}
                     title={`Gasto ${m.expense}`}
                   />
                 </div>
