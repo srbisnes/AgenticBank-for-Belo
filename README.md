@@ -7,6 +7,7 @@
 [![Status](https://img.shields.io/badge/status-prototype-orange)](https://github.com/srbisnes/AgenticBank-for-Belo)
 [![Stack](https://img.shields.io/badge/stack-React%20%7C%20TypeScript%20%7C%20Gemini-blue)](https://github.com/srbisnes/AgenticBank-for-Belo)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+[![Stellar Agent Layer](https://img.shields.io/badge/ecosystem-Stellar%20Agent%20Layer-7D00FF)](https://github.com/srbisnes/stellar-agent-layer)
 
 [Presentación inversores](docs/investors/index.html) · [Brief](docs/investors/INVESTOR_BRIEF.md) · [Arquitectura](docs/ARCHITECTURE.md) · [Roadmap](ROADMAP.md) · [English](README.en.md)
 
@@ -130,6 +131,10 @@ npx tsx examples/demo.ts
 ```
 
 Puerto de referencia del prototipo: 3000.
+
+## Capa de Ejecución en Blockchain (Ecosistema)
+
+AgenticBank se complementa con [stellar-agent-layer](https://github.com/srbisnes/stellar-agent-layer), una capa orientada a la ejecución en cadena sobre Stellar Testnet que provee rieles descentralizados y ejecución cross-chain para las decisiones financieras autónomas.
 
 ## Stack
 
