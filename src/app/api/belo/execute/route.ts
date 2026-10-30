@@ -9,16 +9,23 @@ export async function POST(req: NextRequest) {
   try {
     const body = (await req.json()) as Partial<ExecuteRequest>;
     const amount = Number(body.amount);
-    const currency = body.currency || "USD";
-    const agent = body.agent || "Freelancer";
-    const intent = body.intent || "allocate_income";
 
-    if (!Number.isFinite(amount) || amount <= 0) {
+    if (!Number.isFinite(amount) || amount <= 0 || amount > 1_000_000_000) {
       return NextResponse.json(
-        { error: "amount must be a positive number" },
+        { error: "amount must be a positive finite number up to 1,000,000,000" },
         { status: 400 }
       );
     }
+
+    const sanitizeString = (val: unknown, fallback: string, maxLen: number): string => {
+      if (typeof val !== "string") return fallback;
+      const cleaned = val.replace(/[|\r\n]/g, " ").trim();
+      return cleaned.slice(0, maxLen) || fallback;
+    };
+
+    const currency = sanitizeString(body.currency, "USD", 10);
+    const agent = sanitizeString(body.agent, "Freelancer", 50);
+    const intent = sanitizeString(body.intent, "allocate_income", 50);
 
     const event: BankEvent = {
       type: "income_received",
