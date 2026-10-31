@@ -17,6 +17,7 @@ sequenceDiagram
     participant RE as Risk Engine
     participant EL as Execution Layer
     participant BA as Belo APIs (simuladas)
+    participant SAL as Stellar Agent Layer
     participant AT as Audit Trail
 
     U->>GE: Define meta (ej. ahorrar USD 10.000)
@@ -29,8 +30,13 @@ sequenceDiagram
         RE-->>U: Solicitar 2FA / aprobación
         U->>EL: Confirma
     end
-    EL->>BA: POST /api/belo/execute (simulado)
-    BA-->>EL: Respuesta simulada
+    par Riel Fiat / Belo
+        EL->>BA: POST /api/belo/execute (simulado)
+        BA-->>EL: Respuesta simulada
+    and Riel On-chain / Stellar
+        EL->>SAL: Submit PaymentIntent / Off-ramp (Stellar Testnet)
+        SAL-->>EL: Confirmación de transacción en Stellar
+    end
     EL->>AT: Recibo SHA-256
     AT-->>U: Dashboard + auditoría
 ```
@@ -42,9 +48,17 @@ sequenceDiagram
 | Frontend | Web App, Mobile App, Agent Chat | Interfaz, metas, dashboard |
 | AI Layer | Financial Copilot, Goal Engine, Decision Engine, Memory Layer, Risk Engine, Multi-Agent Orchestrator | Análisis, planificación, decisión y riesgo |
 | Agentes | Freelancer, Travel, Family, Treasury, Investment | Especialización por caso de uso |
-| Execution Layer | Payments, Transfers, PIX, Stablecoins, FX, Cards | Rieles de ejecución |
+| Execution Layer | Payments, Transfers, PIX, Stablecoins, FX, Cards, [Stellar Agent Layer](https://github.com/srbisnes/stellar-agent-layer) | Rieles de ejecución fiat y decentralized cross-chain rails (Stellar Testnet) |
 | Belo Integration | Capa de integración desacoplada | APIs simuladas en el prototipo |
+| Stellar Integration | Stellar Agent Layer (`srbisnes/stellar-agent-layer`) | Intent Engine, XLM/USDC off-ramp, Human-in-the-Loop gate |
 | Audit | SHA-256 chain, Risk score, Compliance matrices (diseño) | Trazabilidad |
+
+## Integración con Stellar Agent Layer
+
+AgenticBank incorpora [**Stellar Agent Layer**](https://github.com/srbisnes/stellar-agent-layer) como capa complementaria para la ejecución agéntica en Stellar Testnet y liquidación descentralizada. Esta integración abarca:
+- **Ejecución agéntica multi-cadena y multi-moneda**: Soporte de intenciones para XLM, USDC y off-ramp a pesos argentinos (ARS) y otros rieles fiat locales.
+- **Human-in-the-Loop Gate**: Los agentes autónomos generan `PaymentIntent` estructurados, requiriendo confirmación humana obligatoria antes de firmar cualquier transacción con valor.
+- **Rieles verificables en Testnet**: Compatibilidad con Horizon Testnet, faucet de Friendbot y firmas mediante Freighter o pares de claves locales ed25519 checksum-validadas.
 
 ## Endpoint simulado
 
