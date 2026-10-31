@@ -1,0 +1,4 @@
+## 2026-10-31 - HTTP Security Headers in Next.js App Router
+**Vulnerability:** Next.js default configuration does not emit recommended HTTP security headers (`X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`), leaving financial prototype pages vulnerable to clickjacking and MIME-type sniffing.
+**Learning:** In Next.js 15 App Router, `headers()` in `next.config.ts` can globally enforce security headers across both pages and API routes without runtime middleware overhead. When running `eslint` with Next.js flat config, `.next/**` must be explicitly added to `ignores` to avoid inspecting compiled artifacts.
+**Prevention:** Always verify `next.config.ts` defines baseline HTTP security headers for all routes `/:path*` and ignore build artifacts in eslint configuration.
