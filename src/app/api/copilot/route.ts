@@ -75,8 +75,15 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const message = String(body.message || "").trim();
 
+    // Security check: validate input presence and enforce max length to prevent DoS/prompt bloat
     if (!message) {
       return NextResponse.json({ error: "message required" }, { status: 400 });
+    }
+    if (message.length > 1000) {
+      return NextResponse.json(
+        { error: "message exceeds maximum length of 1000 characters" },
+        { status: 400 }
+      );
     }
 
     // 1. Busca os preços ao vivo diretamente da Belo
