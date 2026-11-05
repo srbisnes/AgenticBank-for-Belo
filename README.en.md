@@ -5,6 +5,7 @@
 **From Digital Banking to Agentic Banking.**
 
 [![Status](https://img.shields.io/badge/status-prototype-orange)](https://github.com/srbisnes/AgenticBank-for-Belo)
+[![Stellar Layer](https://img.shields.io/badge/Stellar-Agent--Layer-7D00FF)](https://github.com/srbisnes/stellar-agent-layer)
 [![Stack](https://img.shields.io/badge/stack-React%20%7C%20TypeScript%20%7C%20Gemini-blue)](https://github.com/srbisnes/AgenticBank-for-Belo)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
@@ -77,6 +78,7 @@ flowchart TB
   end
   subgraph Execution
     PAY[Payments / PIX / FX / Cards]
+    SAL[Stellar Agent Layer — Cross-Chain Rails]
   end
   subgraph Belo
     API[Integration Layer — simulated]
@@ -84,7 +86,15 @@ flowchart TB
   Frontend --> AI Layer
   AI Layer --> Execution
   Execution --> Belo
+  Execution --> SAL
 ```
+
+## Ecosystem & Stellar Execution Layer
+
+AgenticBank integrates with [**Stellar Agent Layer**](https://github.com/srbisnes/stellar-agent-layer) as a complementary agentic execution layer on Stellar Testnet. This layer enables:
+- **Autonomous USDC to ARS/fiat off-ramping** with a safety-first *Human-in-the-Loop* gate.
+- **Transparent on-chain execution** supporting ed25519 keypairs, Friendbot faucet, and wallet extensions like Freighter.
+- **Auditable payment intent history** verifiable directly on the Stellar blockchain.
 
 ## Example: USD 2,500 income
 
