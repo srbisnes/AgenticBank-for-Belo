@@ -1,0 +1,3 @@
+## 2026-11-08 - Module-level Caching for Intl.NumberFormat in React Components and Server Routes
+**Learning:** In V8/Node.js/browser environments, calling `Number.prototype.toLocaleString("es-AR")` repeatedly inside React render loops and API routes creates and discards internal `Intl.NumberFormat` instances on every invocation, adding unnecessary initialization overhead and garbage collection pressure.
+**Action:** Always import a module-level cached `Intl.NumberFormat` instance (e.g. from `src/lib/format.ts`) instead of invoking raw `val.toLocaleString(...)` in components, loops, or endpoints.
