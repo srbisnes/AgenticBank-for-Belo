@@ -1,5 +1,6 @@
 import { DemoRunner } from "@/components/DemoRunner";
 import { adf, targets } from "@/lib/adf";
+import { formatNumber } from "@/lib/format";
 import {
   cashFlowSeries,
   initialBalances,
@@ -31,18 +32,19 @@ export default function DashboardPage() {
       </header>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {/* Bolt: formatNumber uses cached Intl.NumberFormat avoiding per-render allocations */}
         {[
           {
             label: "Net Worth",
-            value: `USD ${netWorth.toLocaleString("es-AR")}`,
+            value: `USD ${formatNumber(netWorth)}`,
           },
           {
             label: "Disponible",
-            value: `USD ${initialBalances.available.toLocaleString("es-AR")}`,
+            value: `USD ${formatNumber(initialBalances.available)}`,
           },
           {
             label: "Vault",
-            value: `USD ${initialBalances.vault.toLocaleString("es-AR")}`,
+            value: `USD ${formatNumber(initialBalances.vault)}`,
           },
           {
             label: "ADF",

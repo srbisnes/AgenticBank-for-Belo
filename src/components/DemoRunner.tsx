@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { formatNumber } from "@/lib/format";
 import type { ExecuteResponse } from "@/lib/types";
 
 export function DemoRunner() {
@@ -108,8 +109,9 @@ export function DemoRunner() {
                   key={rail}
                   className="rounded-lg border border-[var(--border)] bg-[var(--bg)]/50 p-3"
                 >
+                  {/* Bolt: formatNumber uses cached Intl.NumberFormat avoiding re-instantiation across allocations */}
                   <p className="font-[family-name:var(--font-sora)] text-xl text-[var(--primary)]">
-                    {val.toLocaleString("es-AR")}
+                    {formatNumber(val)}
                   </p>
                   <p className="mt-1 break-all text-xs text-[var(--muted)]">
                     {rail}
