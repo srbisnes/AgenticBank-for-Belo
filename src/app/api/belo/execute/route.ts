@@ -13,9 +13,17 @@ export async function POST(req: NextRequest) {
     const agent = body.agent || "Freelancer";
     const intent = body.intent || "allocate_income";
 
-    if (!Number.isFinite(amount) || amount <= 0) {
+    if (!Number.isFinite(amount) || amount <= 0 || amount > 1_000_000_000) {
       return NextResponse.json(
-        { error: "amount must be a positive number" },
+        { error: "amount must be a positive number up to 1,000,000,000" },
+        { status: 400 }
+      );
+    }
+
+    // Security: sanitize and restrict agent/currency length to prevent log injection or memory exhaustion
+    if (typeof currency !== "string" || currency.length > 10 || typeof agent !== "string" || agent.length > 50 || typeof intent !== "string" || intent.length > 100) {
+      return NextResponse.json(
+        { error: "Invalid currency, agent, or intent parameter" },
         { status: 400 }
       );
     }
