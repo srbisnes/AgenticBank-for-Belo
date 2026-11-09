@@ -79,6 +79,14 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "message required" }, { status: 400 });
     }
 
+    // Security: limit input length to prevent denial-of-service and excessive LLM token usage
+    if (message.length > 1000) {
+      return NextResponse.json(
+        { error: "message exceeds maximum length of 1000 characters" },
+        { status: 400 }
+      );
+    }
+
     // 1. Busca os preços ao vivo diretamente da Belo
     const liveRates = await getLiveBeloRates();
     const groqKey = process.env.GROQ_API_KEY;
