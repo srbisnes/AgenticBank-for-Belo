@@ -1,0 +1,4 @@
+## 2026-11-10 - Copilot API Input Bound & Upstream Request Timeout Protection
+**Vulnerability:** `POST /api/copilot` accepted unbounded user message strings into regex pattern matching and external LLM payloads, while initiating untimed HTTP fetches to external services (`api.belo.app` and `api.groq.com`).
+**Learning:** In Next.js serverless/edge route handlers, unbounded user text inputs passed directly to regex filters and LLM prompts create vulnerabilities to ReDoS, context stuffing, and memory exhaustion. Furthermore, fetch calls without an explicit `signal: AbortSignal.timeout(...)` can hold serverless execution slots open indefinitely if upstream endpoints degrade.
+**Prevention:** Enforce input length caps (`MAX_MESSAGE_LENGTH = 1000`) at the controller entrypoint and attach `AbortSignal.timeout(...)` to every external outbound HTTP request.
