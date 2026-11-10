@@ -5,10 +5,15 @@ import { initialBalances, initialGoals } from "@/lib/mock-data";
 
 export const runtime = "nodejs";
 
+// Security: limit maximum allowed message length to avoid ReDoS and LLM payload abuse
+const MAX_MESSAGE_LENGTH = 1000;
+
 // Busca cotações oficiais e em tempo real da Belo
 async function getLiveBeloRates(): Promise<string> {
   try {
+    // Security: AbortSignal.timeout prevents connection hanging if upstream Belo API stalls
     const res = await fetch("https://api.belo.app/public/price", {
+      signal: AbortSignal.timeout(5000),
       next: { revalidate: 30 }, // Cache de 30 segundos
     });
     if (!res.ok) return "";
@@ -79,6 +84,14 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "message required" }, { status: 400 });
     }
 
+    // Security: Reject oversized payloads to prevent resource exhaustion and abuse
+    if (message.length > MAX_MESSAGE_LENGTH) {
+      return NextResponse.json(
+        { error: `Message exceeds maximum allowed length of ${MAX_MESSAGE_LENGTH} characters` },
+        { status: 400 }
+      );
+    }
+
     // 1. Busca os preços ao vivo diretamente da Belo
     const liveRates = await getLiveBeloRates();
     const groqKey = process.env.GROQ_API_KEY;
@@ -102,12 +115,14 @@ Pautas:
 - Si el usuario pregunta cotizaciones, conversiones o precios, usá SIEMPRE las tasas exactas de Belo indicadas arriba.
 - Respondé en el mismo idioma que pregunte el usuario (español o portugués).`;
 
+        // Security: Add AbortSignal.timeout to external AI provider requests to avoid thread starvation
         const groqRes = await fetch("https://api.groq.com/openai/v1/chat/completions", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${groqKey}`,
           },
+          signal: AbortSignal.timeout(10000),
           body: JSON.stringify({
             model: "llama-3.3-70b-versatile",
             messages: [
