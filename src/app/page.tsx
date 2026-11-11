@@ -1,5 +1,6 @@
 import { DemoRunner } from "@/components/DemoRunner";
 import { adf, targets } from "@/lib/adf";
+import { formatNumber } from "@/lib/format";
 import {
   cashFlowSeries,
   initialBalances,
@@ -34,15 +35,15 @@ export default function DashboardPage() {
         {[
           {
             label: "Net Worth",
-            value: `USD ${netWorth.toLocaleString("es-AR")}`,
+            value: `USD ${formatNumber(netWorth)}`,
           },
           {
             label: "Disponible",
-            value: `USD ${initialBalances.available.toLocaleString("es-AR")}`,
+            value: `USD ${formatNumber(initialBalances.available)}`,
           },
           {
             label: "Vault",
-            value: `USD ${initialBalances.vault.toLocaleString("es-AR")}`,
+            value: `USD ${formatNumber(initialBalances.vault)}`,
           },
           {
             label: "ADF",

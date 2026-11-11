@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { listRules } from "@/lib/rules-engine";
 import { adf, targets } from "@/lib/adf";
+import { formatNumber } from "@/lib/format";
 import { initialBalances, initialGoals } from "@/lib/mock-data";
 
 export const runtime = "nodejs";
@@ -17,7 +18,7 @@ async function getLiveBeloRates(): Promise<string> {
     const tracked = ["USDT/ARS", "USDC/ARS", "USD/USDT", "BRL/ARS", "BTC/ARS"];
     return pairs
       .filter((p) => tracked.includes(p.pairCode))
-      .map((p) => `${p.pairCode}: Compra (Bid) = $${Number(p.bid).toLocaleString("es-AR")}, Venta (Ask) = $${Number(p.ask).toLocaleString("es-AR")}`)
+      .map((p) => `${p.pairCode}: Compra (Bid) = $${formatNumber(Number(p.bid))}, Venta (Ask) = $${formatNumber(Number(p.ask))}`)
       .join(" | ");
   } catch (err) {
     console.warn("Erro ao buscar preços ao vivo da Belo:", err);
@@ -36,14 +37,14 @@ function fallbackReply(message: string, liveRates: string): string {
   }
   if (/ahorr|vault|fondo/.test(q)) {
     const g = initialGoals[0];
-    return `Tenés USD ${initialBalances.vault.toLocaleString("es-AR")} en BELO_VAULT_SWEEP. Tu meta «${g.title}» va ${Math.round((g.currentAmount / g.targetAmount) * 100)}% (USD ${g.currentAmount.toLocaleString("es-AR")} / ${g.targetAmount.toLocaleString("es-AR")}). Con la regla 20/20/60, cada cobro suma automáticamente al vault.`;
+    return `Tenés USD ${formatNumber(initialBalances.vault)} en BELO_VAULT_SWEEP. Tu meta «${g.title}» va ${Math.round((g.currentAmount / g.targetAmount) * 100)}% (USD ${formatNumber(g.currentAmount)} / ${formatNumber(g.targetAmount)}). Con la regla 20/20/60, cada cobro suma automáticamente al vault.`;
   }
   if (/saldo|balance|disponible|cuanto tengo/.test(q)) {
     const total =
       initialBalances.available +
       initialBalances.vault +
       initialBalances.taxEscrow;
-    return `Saldos simulados: disponible USD ${initialBalances.available.toLocaleString("es-AR")}, vault ${initialBalances.vault.toLocaleString("es-AR")}, impuestos ${initialBalances.taxEscrow.toLocaleString("es-AR")}. Net worth ~ USD ${total.toLocaleString("es-AR")}.`;
+    return `Saldos simulados: disponible USD ${formatNumber(initialBalances.available)}, vault ${formatNumber(initialBalances.vault)}, impuestos ${formatNumber(initialBalances.taxEscrow)}. Net worth ~ USD ${formatNumber(total)}.`;
   }
   if (/regla|rule|20/.test(q)) {
     const rules = listRules()
