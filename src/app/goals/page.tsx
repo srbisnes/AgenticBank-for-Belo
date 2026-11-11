@@ -1,3 +1,4 @@
+import { formatNumber } from "@/lib/format";
 import { initialGoals } from "@/lib/mock-data";
 
 export default function GoalsPage() {
@@ -49,11 +50,11 @@ export default function GoalsPage() {
               </div>
               <p className="mt-3 text-sm">
                 <span className="text-[var(--primary)]">
-                  {g.currency} {g.currentAmount.toLocaleString("es-AR")}
+                  {g.currency} {formatNumber(g.currentAmount)}
                 </span>
                 <span className="text-[var(--muted)]">
                   {" "}
-                  / {g.targetAmount.toLocaleString("es-AR")}
+                  / {formatNumber(g.targetAmount)}
                 </span>
               </p>
               <div className="mt-2 h-2 overflow-hidden rounded-full bg-white/10">
